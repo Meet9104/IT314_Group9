@@ -84,20 +84,18 @@ WSGI_APPLICATION = 'student_leave_and_taship_management.wsgi.application'
     #}
 #}
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.dummy',
-    },
-    'mongo': {
         'ENGINE': 'djongo',
-        'NAME': 'demodatabase',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': 'localhost:27017',
-        }
+        'NAME': 'database1',mongodb+srv://admin:X06VAiRdw6TlN2n6@cluster0.uinbj2g.mongodb.net/test
+        'HOST': '',
+        'USERNAME': 'admin',
+        'PASSWORD': 'X06VAiRdw6TlN2n6',
+        'AUTH_SOURCE': 'admin',
+        'AUTH_MECHANISM': 'SCRAM-SHA-1',
     }
 }
-
 
 
 
