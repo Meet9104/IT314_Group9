@@ -30,20 +30,28 @@ def login_view(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None and user.is_faculty:
-                login(request, user)
-                return redirect('facultypage')
-            elif user is not None and user.is_ta:
-                login(request, user)
-                return redirect('ta')
-            elif user is not None and user.is_student:
-                login(request, user)
-                return redirect('student')
-            else:
-                msg= 'invalid credentials'
-        else:
-            msg = 'error validating form'
+            # print(username, password)
+
+            studenttable = db['student info']
+            reply = studenttable.find_one({'email': username})
+            # print(reply)
+            if reply:
+                if reply['password'] == password:
+                    return render(request, 'student.html', {'user' : reply})
+                
+            facultytable = db['faculty info']
+            reply = facultytable.find_one({'email': username})
+            # print(reply)
+            if reply:
+                if reply['password'] == password:
+                    return render(request, 'faculty.html', {'user' : reply})
+                
+            tatble = db['ta info']
+            reply = tatble.find_one({'email': username})
+            # print(reply)
+            if reply:
+                if reply['password'] == password:
+                    return render(request, 'ta.html', {'user' : reply})
     return render(request, 'login.html', {'form': form, 'msg': msg})
 
 
