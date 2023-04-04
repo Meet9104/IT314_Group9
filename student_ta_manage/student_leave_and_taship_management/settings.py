@@ -84,7 +84,6 @@ WSGI_APPLICATION = 'student_leave_and_taship_management.wsgi.application'
     #}
 #}
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
