@@ -1,10 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
-    <title>ta page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to | App_name</title>
+    <link rel="stylesheet" href="../static/css/ta.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script>
+      setTimeout(function(){
+          if ($('#msg3').length > 0) {
+              $('#msg3').remove();
+          }
+      }, 1500)    // 2000 millisecond
+   </script>
 </head>
+{% if messages %}
+<div class="messages" id="msg3">
+  {% for mess in messages %}
+    <div class="message message-success">
+      {{ mess }}
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
 <body>
- <h1> hello {{ user.username }} your role is ta</h1>
+  <nav>
+    <div class="wrapper">
+      <div class="logo"><a href="#">App_name</a></div>
+      <input type="radio" name="slider" id="menu-btn">
+      <input type="radio" name="slider" id="close-btn">
+      <ul class="nav-links">
+        <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Profile</a></li>
+        <li>
+          <a href="#" class="desktop-item">Attendance</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Attendance</label>
+          <ul class="drop-menu">
+            <li><a href="#">Show Attendance</a></li>
+            <!-- <li><a href="#">Add Attendance</a></li> -->
+          </ul>
+        </li>
+        <li>
+            <a href="#" class="desktop-item">Utilities</a>
+            <input type="checkbox" id="showDrop">
+            <label for="showDrop" class="mobile-item">Utilities</label>
+            <ul class="drop-menu">
+              <li><a href="#">Apply for leave</a></li>
+              <li><a href="#">View List of TAs</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="desktop-item">Inbox</a>
+            <input type="checkbox" id="showDrop">
+            <label for="showDrop" class="mobile-item">Inbox</label>
+            <ul class="drop-menu">
+              <li><a href="#">Leave Application status</a></li>
+            </ul>
+        </li>
+        <li>
+          <a href="#" class="desktop-item">Logout</a>
+        </li>
+        
+      </ul>
+      <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+    </div>
+  </nav>
+  <div class="body-text">
+    <h1> hello {{ user.name }} your role is ta</h1>
+  </div>
+  <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
 </body>
+
 </html>
