@@ -2,61 +2,271 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to | App_name</title>
-    <link rel="stylesheet" href="../static/css/student.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
+    <!-- Material icons cdn  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- css -->
+    <link rel="stylesheet" href="../static/css/student.css">
+
+    <title>Dashboard</title>
 </head>
 <body>
-    <nav>
-      <div class="wrapper">
-        <div class="logo"><a href="#">App_name</a></div>
-        <input type="radio" name="slider" id="menu-btn">
-        <input type="radio" name="slider" id="close-btn">
-        <ul class="nav-links">
-          <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Profile</a></li>
-          <li>
-            <a href="#" class="desktop-item">Attendance</a>
-            <input type="checkbox" id="showDrop">
-            <label for="showDrop" class="mobile-item">Attendance</label>
-            <ul class="drop-menu">
-              <li><a href="#">Show Attendance</a></li>
-              <!-- <li><a href="#">Add Attendance</a></li> -->
-            </ul>
-          </li>
-          <li>
-              <a href="#" class="desktop-item">Utilities</a>
-              <input type="checkbox" id="showDrop">
-              <label for="showDrop" class="mobile-item">Utilities</label>
-              <ul class="drop-menu">
-                <li><a href="#">Apply for leave</a></li>
-                <li><a href="#">Apply for TAship</a></li>
-              </ul>
-          </li>
-          <li>
-              <a href="#" class="desktop-item">Inbox</a>
-              <input type="checkbox" id="showDrop">
-              <label for="showDrop" class="mobile-item">Inbox</label>
-              <ul class="drop-menu">
-                <li><a href="#">Leave Application status</a></li>
-                <li><a href="#">TA Application status</a></li>
-              </ul>
-          </li>
-          <li>
-            <a href="#" class="desktop-item">Logout</a>
-          </li>
-          
-        </ul>
-        <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
-      </div>
-    </nav>
-  
-    <div class="body-text">
-        <h1> hello {{ user.name }} your role is student</h1>
+    <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <img src="./images/logo.png" alt="logo">
+                    <h2>Leave<span>Wiz</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <i class="material-icons">close</i>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                    <a href="#" class="active onclickf" id="button1">
+                        <i class="material-icons">dashboard</i>
+                        <h3>Dashboard</h3>
+                    </a>
+                    
+                    <a href="#" class="onclickf" id="button2" onclick={onclickactive}>
+                        <i class="material-icons">person</i>
+                        <h3>Profile</h3>
+                    </a>
+                    
+                    <a href="../templates/leaveform.html" class="onclickf" id="button3">
+                        <i class="material-icons">add_circle</i>
+                        <h3>Apply for Leave</h3>
+                    </a>
+                    
+                    <a href="#" class="onclickf" id="button4">
+                        <i class="material-icons">import_contacts</i>
+                        <h3>Leave Status</h3>
+                    </a>
+                    
+                    <a href="#" class="onclickf" id="button5">
+                        <i class="material-icons">school</i>
+                        <h3>Courses</h3>
+                        <!-- <span class="message-count">26</span> -->
+                    </a>
+                    
+                    <a href="#" class="onclickf" id="button6">
+                        <i class="material-icons">settings</i>
+                        <h3>Settings</h3>
+                    </a>
+
+                    <a href="#" class="onclickf" id="button7">
+                        <i class="material-icons">logout</i>
+                        <h3>Logout</h3>
+                    </a>
+            </div> 
+        </aside>
+
+
+        <main>
+            <h1>Dashboard</h1>
+
+            <!-- <div class="date">
+                <input type="date">
+            </div> -->
+
+            <div class="insights">
+
+
+                <div class="attendence">
+                    <i class="material-icons">school</i>
+
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Attendence</h3>
+                            <h1>100</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="number">
+                                <p>81%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted">Out of : 150</small>
+                </div>
+
+                <div class="leave">
+                    <i class="material-icons">star</i>
+
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Leave Taken</h3>
+                            <h1>100</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="number">
+                                <p>81%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted">Out of : 150</small>
+                </div>
+
+                <div class="leave-month">
+                    <i class="material-icons">star_half</i>
+
+                    <div class="middle">
+                        <div class="left">
+                            <h3>leave taken this month</h3>
+                            <h1>100</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="number">
+                                <p>81%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted">Out of : 150</small>
+                </div>
+
+            </div>
+
+
+            <div class="leave-status">
+
+                <h2>Leave Status</h2>
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>Sr. No.</th>
+                            <th>Starting Date</th>
+                            <th>Ending Date</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>02/11/2020</td>
+                            <td>05/11/2020</td>
+                            <td>Personal</td>
+                            <td class="warning">Approved</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>02/11/2020</td>
+                            <td>05/11/2020</td>
+                            <td>Personal</td>
+                            <td class="warning">Approved</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>02/11/2020</td>
+                            <td>05/11/2020</td>
+                            <td>Personal</td>
+                            <td class="warning">Approved</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>02/11/2020</td>
+                            <td>05/11/2020</td>
+                            <td>Personal</td>
+                            <td class="warning">Approved</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>02/11/2020</td>
+                            <td>05/11/2020</td>
+                            <td>Personal</td>
+                            <td class="warning">Approved</td>
+                            <td class="primary">Details</td>
+                        </tr>
+                    </tbody>
+                </Table>
+                <a href="#">Show All</a>
+            </div>
+        </main>
+
+
+        <div class="right">
+            <div class="top">
+                <button id="menu-btn">
+                    <i class="material-icons">menu</i>
+                </button>
+                <div class="theme-toggler">
+                    <i class="material-icons active">light_mode</i>
+                    <i class="material-icons">dark_mode</i>
+                </div>
+                
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>Meet</b></p>
+                        <small class="text-muted">Student</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="" alt="profile-photo">
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-updates">
+                <h2>Recent Updates</h2>
+                <div class="updates">
+                    <div class="update">
+                        <div class="profile-photo">
+                            <img src="" alt="profile-photo">
+                        </div>
+                        <div class="message">
+                            <p><b>202006969</b> You were absent on 10/11/2069</p>
+                            <small class="text-muted"> 5 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="update">
+                        <div class="profile-photo">
+                            <img src="" alt="profile-photo">
+                        </div>
+                        <div class="message">
+                            <p><b>202006969</b> You were absent on 10/11/2069</p>
+                            <small class="text-muted"> 5 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="update">
+                        <div class="profile-photo">
+                            <img src="" alt="profile-photo">
+                        </div>
+                        <div class="message">
+                            <p><b>202006969</b> You were absent on 10/11/2069</p>
+                            <small class="text-muted"> 5 minutes ago</small>
+                        </div>
+                    </div>
+                    <div class="update">
+                        <div class="profile-photo">
+                            <img src="" alt="profile-photo">
+                        </div>
+                        <div class="message">
+                            <p><b>202006969</b> You were absent on 10/11/2069</p>
+                            <small class="text-muted"> 5 minutes ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  
-  </body>
+
+
+    <script src="../static/js/student.js"></script>
+</body>
 </html>
