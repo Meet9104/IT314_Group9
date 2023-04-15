@@ -1,14 +1,11 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 # Create your views here.
 from pymongo import MongoClient
 client = MongoClient('mongodb+srv://maharth:maharth@cluster0.xsqej9v.mongodb.net/test')
 db = client['Leave_Management_System']
-
-
-def index(request):
-    return render(request, 'index.html')
 
 
 def register(request):
@@ -26,7 +23,7 @@ def register(request):
     return render(request,'register.html', {'form': form, 'msg': msg})
 
 
-def login_view(request):
+def index(request):
     form = LoginForm(request.POST or None)
     msg = None
     if request.method == 'POST':
@@ -34,12 +31,12 @@ def login_view(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             # print(username, password)
-
             studenttable = db['student info']
             reply = studenttable.find_one({'email': username})
             # print(reply)
             if reply:
                 if reply['password'] == password:
+                    messages.success(request,"You have been logged in successfully as Student!")
                     return render(request, 'student.html', {'user' : reply})
                 
             facultytable = db['faculty info']
@@ -47,6 +44,7 @@ def login_view(request):
             # print(reply)
             if reply:
                 if reply['password'] == password:
+                    messages.success(request,"You have been logged in successfully as Faculty!")
                     return render(request, 'faculty.html', {'user' : reply})
                 
             tatble = db['ta info']
@@ -54,8 +52,13 @@ def login_view(request):
             # print(reply)
             if reply:
                 if reply['password'] == password:
+                    messages.success(request,"You have been logged in successfully as TA!")
                     return render(request, 'ta.html', {'user' : reply})
-    return render(request, 'login.html', {'form': form, 'msg': msg})
+            
+            messages.error(request,"Please Enter Valid Details!")
+            return render(request, 'index.html', {'form': form, 'msg': msg})
+        
+    return render(request, 'index.html', {'form': form, 'msg': msg})
 
             # return redirect('student.html')
             # print(reply)
