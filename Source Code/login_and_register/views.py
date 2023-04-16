@@ -7,6 +7,39 @@ from pymongo import MongoClient
 client = MongoClient('mongodb+srv://maharth:maharth@cluster0.xsqej9v.mongodb.net/test')
 db = client['Leave_Management_System']
 
+def profile_page(request):
+    facultytable = db['faculty info']
+    reply = facultytable.find_one({'email': request.session.get('username')})
+        # print(reply)
+
+    # if reply:
+    #     context = {
+    #         'user' : reply,
+    #         }
+        # return render(request, 'faculty.html' , context)
+    if reply is None:
+        studenttable = db['student info']
+        reply = studenttable.find_one({'email': request.session.get('username')})
+        
+    
+        # print(reply)
+
+        # if reply:   
+        #     context = {
+        #         'user' : reply,
+        #     }
+            # return render(request, 'student.html',context)
+    if reply is None:
+        tatble = db['ta info']
+        reply = tatble.find_one({'email': request.session.get('username')})
+
+    if reply:
+        context = {
+            'user' : reply,
+        }
+        return render(request, 'profile.html', context)
+        
+
 def logout_view(request):
     request.session['username'] = None
     return redirect('index')
@@ -236,11 +269,18 @@ def dashboard_redirect_after_leave_apply(request):
         from_date = request.POST.get('from-date')
         to_date = request.POST.get('to-date')
         reason = request.POST.get('reason')
+
+        if from_date > to_date:
+            messages.error(request, 'From date cannot be greater than to date')
+            return render(request,'leaveform.html')
+
         # semester = request.POST.get('semester')
         # reason = request.POST.get('reason')
         # date = request.POST.get('date')
         # print(name,email,rollno,department,year,semester,reason,date)
         # print(leave_type,leave_duration,from_date,to_date,reason)
+
+        # if leave_type == on:
         # studenttable = db['student info']
         username = request.session.get('username')
         
@@ -301,6 +341,8 @@ def dashboard_redirect_after_leave_apply(request):
             print(emailList)
             
             print(reply)
+
+
         # # print(reply)
         # if reply:
         #     print(reply)
@@ -324,8 +366,18 @@ def dashboard_redirect_after_leave_apply(request):
 
 
         }
+        print(from_date,to_date,reason)
+        if len(from_date) == 0  or len(to_date) == 0 or len(reason) == 0 :
+            messages.error(request,"Please fill all the details before submitting!")
+            return render(request,'leaveform.html')
+        
         leaveTable = db['leaveTable']
         leaveTable.insert_one(leaveTableEntry)
+
+        if leaveTableEntry is not None:
+            messages.success(request,"You have successfully applied for leave!")
+        else:
+            messages.error(request,"Error in applying for leave!")
         
         # studenttable.insert_one({'name': name, 'email': email, 'rollno': rollno, 'department': department, 'year': year, 'semester': semester, 'reason': reason, 'date': date})
         # if (role=="student"):

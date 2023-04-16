@@ -22,7 +22,7 @@
     <title>Leave Form</title>
 </head>
 {% if messages %}
-<div class="messages" id="msg">
+<div class="messages" id="msg"> 
   {% for mess in messages %}
     <div class="message message-success">
       {{ mess }}
@@ -30,6 +30,15 @@
   {% endfor %}
 </div>
 {% endif %}
+
+<!-- {% for message in messages %}
+    
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+           {{ message }}
+    </div>
+
+{% endfor %} -->
 <body>
     <div class="container">
         <aside>
@@ -49,7 +58,7 @@
                         <h3>Dashboard</h3>
                     </a>
                     
-                    <a href="#" class="onclickf" id="button2" onclick={onclickactive}>
+                    <a href="/profile_page" class="onclickf" id="button2" onclick={onclickactive}>
                         <i class="material-icons">person</i>
                         <h3>Profile</h3>
                     </a>
