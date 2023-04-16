@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
 # Create your views here.
 from pymongo import MongoClient
 client = MongoClient('mongodb+srv://maharth:maharth@cluster0.xsqej9v.mongodb.net/test')
@@ -11,8 +12,6 @@ def logout_view(request):
     return redirect('index')
 
 def index(request):
-    print(request.session.get('username'))
-
     if request.session.get('username'):
         
         facultytable = db['faculty info']
@@ -44,8 +43,44 @@ def index(request):
                 'user' : reply,
             }
             return render(request, 'ta.html', context)
-
-    return render(request, 'index.html')
+    form = LoginForm(request.POST or None)
+    msg = None
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            # print(username, password)
+            studenttable = db['student info']
+            reply = studenttable.find_one({'email': username})
+            # print(reply)
+            if reply:
+                if reply['password'] == password:
+                    request.session['username'] = username
+                    messages.success(request,"You have been logged in successfully as Student!")
+                    return render(request, 'student.html', {'user' : reply})
+                
+            facultytable = db['faculty info']
+            reply = facultytable.find_one({'email': username})
+            # print(reply)
+            if reply:
+                if reply['password'] == password:
+                    request.session['username'] = username
+                    messages.success(request,"You have been logged in successfully as Faculty!")
+                    return render(request, 'faculty.html', {'user' : reply})
+                
+            tatble = db['ta info']
+            reply = tatble.find_one({'email': username})
+            # print(reply)
+            if reply:
+                if reply['password'] == password:
+                    request.session['username'] = username
+                    messages.success(request,"You have been logged in successfully as TA!")
+                    return render(request, 'ta.html', {'user' : reply})
+            
+            messages.error(request,"Please Enter Valid Details!")
+            return render(request, 'index.html', {'form': form, 'msg': msg})
+        
+    return render(request, 'index.html', {'form': form, 'msg': msg})
 
 
 def register(request):
@@ -205,9 +240,8 @@ def dashboard_redirect_after_leave_apply(request):
         # reason = request.POST.get('reason')
         # date = request.POST.get('date')
         # print(name,email,rollno,department,year,semester,reason,date)
-        print(leave_type,leave_duration,from_date,to_date,reason)
+        # print(leave_type,leave_duration,from_date,to_date,reason)
         # studenttable = db['student info']
-        print("ongoing session is",request.session.get('username'))
         username = request.session.get('username')
         
         studenttable = db['student info']
