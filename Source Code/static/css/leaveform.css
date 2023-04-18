@@ -209,6 +209,7 @@ aside .sidebar a.active {
     background: var(--color-light);
     color: var(--color-primary);
     margin-left: 0;
+    padding-right: 1rem;
 }
 
 aside .sidebar a.active:before {

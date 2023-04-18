@@ -209,6 +209,7 @@ aside .sidebar a.active {
     background: var(--color-light);
     color: var(--color-primary);
     margin-left: 0;
+    padding-right: 1rem;
 }
 
 aside .sidebar a.active:before {
@@ -549,7 +550,7 @@ main .leave-status a {
         position: fixed;
         left: -100%;
         background: var(--color-white);
-        width: 18rem;
+        width: 14rem;
         z-index: 3;
         box-shadow: 1rem 3rem 4rem var(--color-light);
         height: 100vh;
@@ -593,6 +594,7 @@ main .leave-status a {
     aside .close {
         display: inline-block;
         cursor: pointer;
+        padding-left: 25px;
     }
 
     main{

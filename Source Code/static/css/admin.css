@@ -177,6 +177,7 @@ aside .sidebar {
     height: 86vh;
     position: fixed;
     top: 5rem;
+    width: 12rem;
 }
 
 aside h3 {
@@ -209,6 +210,7 @@ aside .sidebar a.active {
     background: var(--color-light);
     color: var(--color-primary);
     margin-left: 0;
+    padding-right: 1rem;
 }
 
 aside .sidebar a.active:before {
@@ -218,9 +220,9 @@ aside .sidebar a.active:before {
     background: var(--color-primary);
 }
 
-aside .sidebar a .onclickf {
+/* aside .sidebar a .onclickf {
     transition: all 300ms ease;
-}
+} */
 
 aside .sidebar a.active i {
     color: var(--color-primary);
@@ -549,7 +551,7 @@ main .leave-status a {
         position: fixed;
         left: -100%;
         background: var(--color-white);
-        width: 18rem;
+        width: 14rem;
         z-index: 3;
         box-shadow: 1rem 3rem 4rem var(--color-light);
         height: 100vh;
@@ -593,6 +595,7 @@ main .leave-status a {
     aside .close {
         display: inline-block;
         cursor: pointer;
+        padding-left: 25px;
     }
 
     main{
