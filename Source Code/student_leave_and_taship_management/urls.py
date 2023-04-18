@@ -21,6 +21,6 @@ admin.site.site_title = "Student Leave and TAship Management Admin Portal"
 admin.site.index_title = "Welcome to Student Leave and TAship Management Portal"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('', include('login_and_register.urls')),
 ]
