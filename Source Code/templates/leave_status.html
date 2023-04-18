@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- {% load static %} -->
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,15 +21,15 @@
     </script>
     <title>Dashboard</title>
 </head>
-<!-- {% if messages %} -->
+{% if messages %}
 <div class="messages" id="msg">
-  <!-- {% for mess in messages %} -->
+  {% for mess in messages %}
     <div class="message message-success">
-      <!-- {{ mess }} -->
+      {{ mess }}
     </div>
-  <!-- {% endfor %} -->
+  {% endfor %}
 </div>
-<!-- {% endif %} -->
+{% endif %}
 <body>
     <div class="container">
         <aside>
@@ -44,15 +44,11 @@
             </div>
 
             <div class="sidebar">
-                    <a href="./admin.html" class="onclickf" id="button1">
+                    <a href="/admin_page" class="onclickf" id="button1">
                         <i class="material-icons">dashboard</i>
                         <h3>Dashboard</h3>
                     </a>
                     
-                    <a href="/profile_page" class="onclickf" id="button2" onclick={onclickactive}>
-                        <i class="material-icons">person</i>
-                        <h3>Profile</h3>
-                    </a>
                     
                     <a href="/leaveform" class="onclickf active" id="button3">
                         <i class="material-icons">add_circle</i>
@@ -381,6 +377,27 @@
                 </div>
 
         </div>
+
+        <div class="right">
+            <div class="top">
+                <button id="menu-btn">
+                    <i class="material-icons">menu</i>
+                </button>
+                <div class="theme-toggler">
+                    <i class="material-icons active">light_mode</i>
+                    <i class="material-icons">dark_mode</i>
+                </div>
+                
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>{{user.name}}</b></p>
+                        <small class="text-muted">{{user.email}}</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="" alt="profile-photo">
+                    </div>
+                </div>
+            </div>
 
         <!-- <div class="right">
             <div class="top">

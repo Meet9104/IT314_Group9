@@ -7,31 +7,28 @@ from pymongo import MongoClient
 client = MongoClient('mongodb+srv://maharth:maharth@cluster0.xsqej9v.mongodb.net/test')
 db = client['Leave_Management_System']
 
+
+
+
 def profile_page(request):
+    
+
     facultytable = db['faculty info']
     reply = facultytable.find_one({'email': request.session.get('username')})
-        # print(reply)
 
-    # if reply:
-    #     context = {
-    #         'user' : reply,
-    #         }
-        # return render(request, 'faculty.html' , context)
     if reply is None:
         studenttable = db['student info']
         reply = studenttable.find_one({'email': request.session.get('username')})
         
     
-        # print(reply)
-
-        # if reply:   
-        #     context = {
-        #         'user' : reply,
-        #     }
-            # return render(request, 'student.html',context)
     if reply is None:
         tatble = db['ta info']
         reply = tatble.find_one({'email': request.session.get('username')})
+
+    if reply is None:
+        adminTablte = db['adminTable']
+        reply = adminTablte.find_one({'email': request.session.get('username')})
+
 
     if reply:
         context = {
@@ -42,14 +39,23 @@ def profile_page(request):
 
 def logout_view(request):
     request.session['username'] = None
+    messages.success(request, "You have been logged out successfully!")
     return redirect('index')
 
 def index(request):
     if request.session.get('username'):
+
+        adminTable = db['adminTable']
+        reply = adminTable.find_one({'email': request.session.get('username')})
+
+        if reply:
+            context = {
+                'user' : reply,
+            }
+            return render(request, 'admin_page.html' , context)
         
         facultytable = db['faculty info']
         reply = facultytable.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:
             context = {
@@ -59,7 +65,6 @@ def index(request):
 
         studenttable = db['student info']
         reply = studenttable.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:   
             context = {
@@ -69,23 +74,31 @@ def index(request):
 
         tatble = db['ta info']
         reply = tatble.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:
             context = {
                 'user' : reply,
             }
             return render(request, 'ta.html', context)
+        
     form = LoginForm(request.POST or None)
     msg = None
     if request.method == 'POST':
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            # print(username, password)
+
+            adminTable = db['adminTable']
+            reply = adminTable.find_one({'email': username})
+            if reply:
+                if reply['password'] == password:
+                    request.session['username'] = username
+                    messages.success(request,"You have been logged in successfully as admin!")
+                    return render(request, 'admin_page.html', {'user' : reply})
+            
             studenttable = db['student info']
             reply = studenttable.find_one({'email': username})
-            # print(reply)
+
             if reply:
                 if reply['password'] == password:
                     request.session['username'] = username
@@ -94,7 +107,7 @@ def index(request):
                 
             facultytable = db['faculty info']
             reply = facultytable.find_one({'email': username})
-            # print(reply)
+
             if reply:
                 if reply['password'] == password:
                     request.session['username'] = username
@@ -103,12 +116,14 @@ def index(request):
                 
             tatble = db['ta info']
             reply = tatble.find_one({'email': username})
-            # print(reply)
+
             if reply:
                 if reply['password'] == password:
                     request.session['username'] = username
                     messages.success(request,"You have been logged in successfully as TA!")
                     return render(request, 'ta.html', {'user' : reply})
+            
+            
             
             messages.error(request,"Please Enter Valid Details!")
             return render(request, 'index.html', {'form': form, 'msg': msg})
@@ -116,124 +131,12 @@ def index(request):
     return render(request, 'index.html', {'form': form, 'msg': msg})
 
 
-def register(request):
-    msg = None
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            msg = 'user created'
-            return redirect('login_view')
-        else:
-            msg = 'form is not valid'
-    else:
-        form = SignUpForm()
-    return render(request,'register.html', {'form': form, 'msg': msg})
-
-
-def login_view(request):
-    print(request.session.get('username'))
-    if request.session.get('username'):
-        
-        facultytable = db['faculty info']
-        reply = facultytable.find_one({'email': request.session.get('username')})
-        # print(reply)
-
-        if reply:
-            context = {
-                'user' : reply,
-            }
-            return render(request, 'faculty.html' , context)
-
-        studenttable = db['student info']
-        reply = studenttable.find_one({'email': request.session.get('username')})
-        # print(reply)
-
-        if reply:   
-            context = {
-                'user' : reply,
-            }
-            return render(request, 'student.html',context)
-
-        tatble = db['ta info']
-        reply = tatble.find_one({'email': request.session.get('username')})
-        # print(reply)
-
-        if reply:
-            context = {
-                'user' : reply,
-            }
-            return render(request, 'ta.html', context)
-
-    form = LoginForm(request.POST or None)
-    msg = None
-    if request.method == 'POST':
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            # print(username, password)
-
-            studenttable = db['student info']
-            reply = studenttable.find_one({'email': username})
-            # print(reply)
-            if reply:
-                if reply['password'] == password:
-                    request.session['username'] = username
-                    return render(request, 'student.html', {'user' : reply})
-                
-            facultytable = db['faculty info']
-            reply = facultytable.find_one({'email': username})
-            # print(reply)
-            if reply:
-                if reply['password'] == password:
-                    request.session['username'] = username
-                    return render(request, 'faculty.html', {'user' : reply})
-                
-            tatble = db['ta info']
-            reply = tatble.find_one({'email': username})
-            # print(reply)
-            if reply:
-                if reply['password'] == password:
-                    request.session['username'] = username
-                    return render(request, 'ta.html', {'user' : reply})
-            
-    return render(request, 'login.html', {'form': form, 'msg': msg})
-
-            # return redirect('student.html')
-            # print(reply)
-        #     user = authenticate(username=username, password=password)
-        #     if user is not None and user.is_faculty:
-        #         login(request, user)
-        #         return redirect('facultypage')
-        #     elif user is not None and user.is_ta:
-        #         login(request, user)
-        #         return redirect('ta')
-        #     elif user is not None and user.is_student:
-        #         login(request, user)
-        #         return redirect('student')
-        #     else:
-        #         msg= 'invalid credentials'
-        # else:
-        #     msg = 'error validating form'
-  
-
-# def faculty(request):
-#     return render(request,'faculty.html')
-
-
-# def ta(request):
-#     return render(request,'ta.html')
-
-
-# def student(request):
-#     return render(request,'student.html')
 
 def leaveform(request):
     if request.session.get('username'):
         
         facultytable = db['faculty info']
         reply = facultytable.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:
             context = {
@@ -243,7 +146,6 @@ def leaveform(request):
 
         studenttable = db['student info']
         reply = studenttable.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:   
             context = {
@@ -253,14 +155,12 @@ def leaveform(request):
 
         tatble = db['ta info']
         reply = tatble.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:
             context = {
                 'user' : reply,
             }
             return render(request, 'leaveform.html', context)
-    # return render(request,'leaveform.html')
 
 def dashboard_redirect_after_leave_apply(request):
     if request.method == 'POST':
@@ -274,19 +174,10 @@ def dashboard_redirect_after_leave_apply(request):
             messages.error(request, 'From date cannot be greater than to date')
             return render(request,'leaveform.html')
 
-        # semester = request.POST.get('semester')
-        # reason = request.POST.get('reason')
-        # date = request.POST.get('date')
-        # print(name,email,rollno,department,year,semester,reason,date)
-        # print(leave_type,leave_duration,from_date,to_date,reason)
-
-        # if leave_type == on:
-        # studenttable = db['student info']
         username = request.session.get('username')
         
         studenttable = db['student info']
         reply = studenttable.find_one({'email': username})
-        # print(reply)
         
         if reply:
             emailList = []
@@ -299,13 +190,9 @@ def dashboard_redirect_after_leave_apply(request):
             role = "student"
             name = reply['name']
             email = reply['email']
-            print(emailList)
-            
-            print(reply)
             
         facultytable = db['faculty info']
         reply = facultytable.find_one({'email': username})
-        # print(reply)
         
         if reply:
             emailList = []
@@ -318,11 +205,6 @@ def dashboard_redirect_after_leave_apply(request):
             role = "faculty"
             name = reply['name']
             email = reply['email']
-            print(emailList)
-            
-            print(reply)
-        # if reply:
-        #     print(reply)
             
         tatble = db['ta info']
         reply = tatble.find_one({'email': username})
@@ -338,16 +220,7 @@ def dashboard_redirect_after_leave_apply(request):
             role = "ta"
             name = reply['name']
             email = reply['email']
-            print(emailList)
-            
-            print(reply)
 
-
-        # # print(reply)
-        # if reply:
-        #     print(reply)
-
-         
         
         leaveTableEntry = {
             'leave_type': leave_type,
@@ -358,15 +231,10 @@ def dashboard_redirect_after_leave_apply(request):
             'emailList': emailList,
             'status': 'pending',    
             'role': role,
-            # 'name' : reply['name'],
-            # 'email' : reply['email'],
             'name' : name,
             'email' : email,
-            
-
-
         }
-        print(from_date,to_date,reason)
+        
         if len(from_date) == 0  or len(to_date) == 0 or len(reason) == 0 :
             messages.error(request,"Please fill all the details before submitting!")
             return render(request,'leaveform.html')
@@ -379,19 +247,10 @@ def dashboard_redirect_after_leave_apply(request):
         else:
             messages.error(request,"Error in applying for leave!")
         
-        # studenttable.insert_one({'name': name, 'email': email, 'rollno': rollno, 'department': department, 'year': year, 'semester': semester, 'reason': reason, 'date': date})
-        # if (role=="student"):
-        #     return render(request,'student.html') 
-        # elif (role=="faculty"):
-        #     return render(request,'faculty.html')
-        # elif (role=="ta"):
-        #     return render(request,'ta.html')
-        # return render(request,'student.html')
     if request.session.get('username'):
         
         facultytable = db['faculty info']
         reply = facultytable.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:
             context = {
@@ -401,7 +260,6 @@ def dashboard_redirect_after_leave_apply(request):
 
         studenttable = db['student info']
         reply = studenttable.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:   
             context = {
@@ -411,11 +269,39 @@ def dashboard_redirect_after_leave_apply(request):
 
         tatble = db['ta info']
         reply = tatble.find_one({'email': request.session.get('username')})
-        # print(reply)
 
         if reply:
             context = {
                 'user' : reply,
             }
             return render(request, 'ta.html', context)
-    # return render(request,'student.html')
+
+            # if reply is None:
+        adminTablte = db['adminTable']
+        reply = adminTablte.find_one({'email': request.session.get('username')})
+
+        if reply:
+            context = {
+                'user' : reply,
+            }
+            return render(request, 'admin_page.html', context)
+
+def admin_page(request):
+     if request.session.get('username'):
+        adminTablte = db['adminTable']
+        reply = adminTablte.find_one({'email': request.session.get('username')})
+        if reply:   
+            context = {
+                'user' : reply,
+            }
+        return render(request,'admin_page.html', context)
+
+def leave_status(request):
+    if request.session.get('username'):
+        adminTablte = db['adminTable']
+        reply = adminTablte.find_one({'email': request.session.get('username')})
+        if reply:   
+            context = {
+                'user' : reply,
+            }
+        return render(request,'leave_status.html', context)

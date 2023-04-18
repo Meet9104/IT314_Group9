@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- {% load static %} -->
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,15 +20,15 @@
     </script>
     <title>Dashboard</title>
 </head>
-<!-- {% if messages %} -->
+{% if messages %}
 <div class="messages" id="msg">
-  <!-- {% for mess in messages %} -->
+  {% for mess in messages %}
     <div class="message message-success">
-      <!-- {{ mess }} -->
+      {{ mess }}
     </div>
-  <!-- {% endfor %} -->
+  {% endfor %}
 </div>
-<!-- {% endif %} -->
+{% endif %}
 <body>
     <div class="container">
         <aside>
@@ -48,12 +48,8 @@
                         <h3>Dashboard</h3>
                     </a>
                     
-                    <a href="/profile_page" class="onclickf" id="button2" onclick={onclickactive}>
-                        <i class="material-icons">person</i>
-                        <h3>Profile</h3>
-                    </a>
                     
-                    <a href="./leave-status.html" class="onclickf" id="button3">
+                    <a href="/leave_status" class="onclickf" id="button3">
                         <i class="material-icons">add_circle</i>
                         <h3>Leave Status</h3>
                     </a>
