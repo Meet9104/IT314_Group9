@@ -31,6 +31,9 @@
         function redirectToRejected() {
             window.location.href = "{% url 'leave_status_rejected' %}";
         }
+    
+        
+
 
         </script>
     <title>Dashboard</title>
@@ -64,7 +67,12 @@
                     </a>
                     
                     
-                    <a href="/leaveform" class="onclickf active" id="button3">
+                    <!-- <a href="/leave_status_pending" class="onclickf active" id="button3">
+                        <i class="material-icfons">add_circle</i>
+                        <h3>Leave Status</h3>
+                    </a> -->
+
+                    <a href="/leave_status_pending" class="active onclickf" id="button3">
                         <i class="material-icons">add_circle</i>
                         <h3>Leave Status</h3>
                     </a>
@@ -122,7 +130,7 @@
                             {% for leave in reply %}
                                 {% if leave.status == "pending" %}
                                 <tr>
-                                    <td>{{leave.id}}</td>
+                                    <td>{{leave.id}}</td>   
                                     <td>{{leave.name}}</td>
                                     <td>{{leave.leave_type}}</td>
                                     <td>{{leave.leave_duration}}</td>
@@ -131,8 +139,15 @@
                                     <td>{{leave.reason}}</td>
                                     <td>{{leave.role}}</td>
                                     <td>
-                                        <button class="accept"><i class="material-icons"> done</i></button>
+
+                                        <button class="accept"><i class="material-icons" onclick="window.location.href='pending_to_approved/{{leave.oid}}/'"> done</i></button> 
+                                        <!-- 
+                                            window location href is used to redirect to another page
+                                            onclick is used to call a function
+                                            {{leave.oid}} is used to pass the id of the leave to the url
+                                         -->
                                         <button class="reject"><i class="material-icons">close</i></button>
+                                         
                                     </td>
                                 </tr>
                                 {% endif %}

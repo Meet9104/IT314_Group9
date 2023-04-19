@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from bson.objectid import ObjectId
+import copy
 # Create your views here.
 from pymongo import MongoClient
 client = MongoClient(
@@ -42,8 +45,9 @@ def logout_view(request):
 
 
 def index(request):
+    # print("before sessions")
     if request.session.get('username'):
-
+        # print("inside sessions")
         adminTable = db['adminTable']
         reply = adminTable.find_one({'email': request.session.get('username')})
 
@@ -83,8 +87,10 @@ def index(request):
             return render(request, 'ta.html', context)
 
     form = LoginForm(request.POST or None)
+    # print(form)
     msg = None
     if request.method == 'POST':
+        # print("inside post")
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
@@ -130,7 +136,9 @@ def index(request):
 
             messages.error(request, "Please Enter Valid Details!")
             return render(request, 'index.html', {'form': form, 'msg': msg})
-
+    # response = JsonResponse({}, status=401)
+    # render(request, 'index.html', {'form': form, 'msg': msg})
+    # return response
     return render(request, 'index.html', {'form': form, 'msg': msg})
 
 
@@ -326,15 +334,15 @@ def leave_status_approved(request):
 def leave_status_pending(request):
     if request.session.get('username'):
         leaveTable = db['leaveTable']
-        # reply = adminTablte.find_one({'email': request.session.get('username')})
-        # reply = leaveTable.find_one({'status': 'pending'})
-        # if reply:
-        #     context = {
-        #         'user': reply,
-        #     }
-
-        
         reply = leaveTable.find()
+        reply = list(reply)   # convert cursor to list
+        # reason for converting cursor to list is that cursor is not iterable
+        # and we need to iterate over it to change the values
+
+        for i in reply:
+            i['oid'] = str(ObjectId(i['_id']))  # convert ObjectId to string
+            # so that it can be used in html
+
         return render(request, 'leave_status_pending.html', {'reply': reply})
 
 
@@ -350,5 +358,58 @@ def leave_status_rejected(request):
         reply = leaveTable.find()
         print(reply)
         return render(request, 'leave_status_rejected.html', {'reply': reply})
-    
 
+
+def accept_leave(request):
+    if request.session.get('username'):
+        leaveTable = db['leaveTable']
+        id = request.POST.get('id_of_obj')
+        reply = leaveTable.find_one({'_id': id})
+        # if reply:
+        #     context = {
+        #         'user': reply,
+        #     }
+        status = 'approved'
+        leaveTable.update_one({'_id': id}, {
+                              '$set': {'status': status}})
+        return render(request, 'leave_status_pending.html')
+
+
+def reject_leave(request, id):
+    if request.session.get('username'):
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find_one({'_id': id})
+        # if reply:
+        #     context = {
+        #         'user': reply,
+        #     }
+        status = 'rejected'
+        leaveTable.update_one({'_id': id}, {
+                              '$set': {'status': status}})
+        return render(request, 'leave_status_pending.html', )
+
+
+def pending_to_approved(request, oid):
+    if request.session.get('username'):
+
+        # convert id to object id
+        # convert string to ObjectId so that it can be used in query to find the object in db using id as a key in db collection (table)
+        id = ObjectId(oid)
+
+        # string is only needed for html to use it as a parameter in url
+
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find_one({'_id': id})
+
+        # upadte status and insert leave table
+
+        status = 'approved'
+        leaveTable.update_one({'_id': id}, {  # update status of leave in leave table
+            '$set': {'status': status}})
+
+        # redirect to pending page using url
+        # to pass updated reply to html page we need to use redirect instead of render
+        return redirect('/leave_status_pending')
+
+        # render will not pass updated reply to html page
+        # # return render(request, '/leave_status_pending/', )
