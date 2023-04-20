@@ -16,5 +16,11 @@ urlpatterns = [
          name='leave_status_approved'),
     path('leave_status_rejected', views.leave_status_rejected,
          name='leave_status_rejected'),
+    path('accept_leave', views.accept_leave, name='accept_leave'),
+    path('reject_leave', views.reject_leave, name='reject_leave'),
+    path('pending_to_approved/<str:oid>/',
+         views.pending_to_approved, name='pending_to_approved'),  # when data is to be fetched from template to view function then we use <str:oid> and when data is to be fetched from view function to template then we use {{oid}}
+         
+         
 
 ]
