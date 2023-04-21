@@ -59,10 +59,15 @@
                     </a>
                     
                     
-                    <a href="/leaveform" class="onclickf active" id="button3">
+                    <!-- <a href="/leaveform" class="onclickf active" id="button3">
                         <i class="material-icons">add_circle</i>
                         <h3>Leave Status</h3>
-                    </a>
+                    </a> -->
+
+                    <!-- <a href="/leave_status_pending" class="active onclickf" id="button3">
+                        <i class="material-icons">add_circle</i>
+                        <h3>Leave Status</h3>
+                    </a> -->
                     
             
 
@@ -126,7 +131,10 @@
                                     <td>{{leave.reason}}</td>
                                     <td>{{leave.role}}</td>
                                     <td>
-                                        <button class="accept"><i class="material-icons">done</i></button>
+                                        <!-- <button class="accept"><i class="material-icons">done</i></button> -->
+
+                                        <button class="accept"><i class="material-icons" onclick="window.location.href='rejected_to_approved/{{leave.oid}}/'"> done</i></button> 
+
                                     </td>
                                 </tr>
                                 {% endif %}

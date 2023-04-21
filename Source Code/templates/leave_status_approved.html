@@ -60,10 +60,10 @@
                     </a>
                     
                     
-                    <a href="/leaveform" class="onclickf active" id="button3">
+                    <!-- <a href="/leaveform" class="onclickf active" id="button3">
                         <i class="material-icons">add_circle</i>
                         <h3>Leave Status</h3>
-                    </a>
+                    </a> -->
                     
             
 
@@ -127,7 +127,10 @@
                                     <td>{{leave.reason}}</td>
                                     <td>{{leave.role}}</td>
                                     <td>
-                                        <button class="reject"><i class="material-icons">close</i></button>
+                                        <!-- <button class="reject"><i class="material-icons">close</i></button> -->
+
+                                        <button class="reject"><i class="material-icons" onclick="window.location.href='approved_to_rejected/{{leave.oid}}/'"> close</i></button>
+
                                     </td>
                                 </tr>
                                 {% endif %}
