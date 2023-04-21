@@ -45,9 +45,9 @@ def logout_view(request):
 
 
 def index(request):
-    # print("before sessions")
+
     if request.session.get('username'):
-        # print("inside sessions")
+
         adminTable = db['adminTable']
         reply = adminTable.find_one({'email': request.session.get('username')})
 
@@ -87,10 +87,10 @@ def index(request):
             return render(request, 'ta.html', context)
 
     form = LoginForm(request.POST or None)
-    # print(form)
+
     msg = None
     if request.method == 'POST':
-        # print("inside post")
+
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
@@ -296,7 +296,6 @@ def dashboard_redirect_after_leave_apply(request):
             }
             return render(request, 'ta.html', context)
 
-            # if reply is None:
         adminTablte = db['adminTable']
         reply = adminTablte.find_one(
             {'email': request.session.get('username')})
@@ -323,17 +322,6 @@ def admin_page(request):
 def leave_status_approved(request):
     if request.session.get('username'):
         leaveTable = db['leaveTable']
-        # reply = adminTablte.find_one({'email': request.session.get('username')})
-        # print()
-        # reply = leaveTable.find_one({'status': 'approved'})
-        # print(reply)
-        reply = leaveTable.find()
-        return render(request, 'leave_status_approved.html', {'reply': reply})
-
-
-def leave_status_pending(request):
-    if request.session.get('username'):
-        leaveTable = db['leaveTable']
         reply = leaveTable.find()
         reply = list(reply)   # convert cursor to list
         # reason for converting cursor to list is that cursor is not iterable
@@ -343,50 +331,31 @@ def leave_status_pending(request):
             i['oid'] = str(ObjectId(i['_id']))  # convert ObjectId to string
             # so that it can be used in html
 
+        return render(request, 'leave_status_approved.html', {'reply': reply})
+
+
+def leave_status_pending(request):
+    if request.session.get('username'):
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find()
+        reply = list(reply)
+
+        for i in reply:
+            i['oid'] = str(ObjectId(i['_id']))
+
         return render(request, 'leave_status_pending.html', {'reply': reply})
 
 
 def leave_status_rejected(request):
     if request.session.get('username'):
         leaveTable = db['leaveTable']
-        # reply = adminTablte.find_one({'email': request.session.get('username')})
-        # reply = leaveTable.find_one({'status': 'rejected'})
-        # if reply:
-        #     context = {
-        #         'user': reply,
-        #     }
         reply = leaveTable.find()
-        print(reply)
+        reply = list(reply)
+
+        for i in reply:
+            i['oid'] = str(ObjectId(i['_id']))
+
         return render(request, 'leave_status_rejected.html', {'reply': reply})
-
-
-def accept_leave(request):
-    if request.session.get('username'):
-        leaveTable = db['leaveTable']
-        id = request.POST.get('id_of_obj')
-        reply = leaveTable.find_one({'_id': id})
-        # if reply:
-        #     context = {
-        #         'user': reply,
-        #     }
-        status = 'approved'
-        leaveTable.update_one({'_id': id}, {
-                              '$set': {'status': status}})
-        return render(request, 'leave_status_pending.html')
-
-
-def reject_leave(request, id):
-    if request.session.get('username'):
-        leaveTable = db['leaveTable']
-        reply = leaveTable.find_one({'_id': id})
-        # if reply:
-        #     context = {
-        #         'user': reply,
-        #     }
-        status = 'rejected'
-        leaveTable.update_one({'_id': id}, {
-                              '$set': {'status': status}})
-        return render(request, 'leave_status_pending.html', )
 
 
 def pending_to_approved(request, oid):
@@ -409,7 +378,53 @@ def pending_to_approved(request, oid):
 
         # redirect to pending page using url
         # to pass updated reply to html page we need to use redirect instead of render
+        messages.success(request, "Leave approved successfully!")
         return redirect('/leave_status_pending')
 
         # render will not pass updated reply to html page
         # # return render(request, '/leave_status_pending/', )
+
+
+def pending_to_rejected(request, oid):
+    if request.session.get('username'):
+
+        id = ObjectId(oid)
+
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find_one({'_id': id})
+
+        status = 'rejected'
+        leaveTable.update_one({'_id': id}, {
+            '$set': {'status': status}})
+        messages.success(request, "Leave rejected successfully!")
+        return redirect('/leave_status_pending')
+
+
+def approved_to_rejected(request, oid):
+    if request.session.get('username'):
+
+        id = ObjectId(oid)
+
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find_one({'_id': id})
+
+        status = 'rejected'
+        leaveTable.update_one({'_id': id}, {
+            '$set': {'status': status}})
+        messages.success(request, "Leave rejected successfully!")
+        return redirect('/leave_status_approved')
+
+
+def rejected_to_approved(request, oid):
+    if request.session.get('username'):
+
+        id = ObjectId(oid)
+
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find_one({'_id': id})
+
+        status = 'approved'
+        leaveTable.update_one({'_id': id}, {
+            '$set': {'status': status}})
+        messages.success(request, "Leave approved successfully!")
+        return redirect('/leave_status_rejected')

@@ -72,10 +72,7 @@
                         <h3>Leave Status</h3>
                     </a> -->
 
-                    <a href="/leave_status_pending" class="active onclickf" id="button3">
-                        <i class="material-icons">add_circle</i>
-                        <h3>Leave Status</h3>
-                    </a>
+                    
                     
             
 
@@ -146,7 +143,9 @@
                                             onclick is used to call a function
                                             {{leave.oid}} is used to pass the id of the leave to the url
                                          -->
-                                        <button class="reject"><i class="material-icons">close</i></button>
+                                        <!-- <button class="reject"><i class="material-icons">close</i></button> -->
+
+                                        <button class="reject"><i class="material-icons" onclick="window.location.href='pending_to_rejected/{{leave.oid}}/'"> close</i></button>
                                          
                                     </td>
                                 </tr>
