@@ -319,7 +319,7 @@ main .insights .progress {
     border-radius: 50%;
 }
 
-main .insights svg {
+/* main .insights svg {
     width: 7rem;
     height: 7rem;
 }
@@ -347,7 +347,7 @@ main .insights .leave svg circle {
 main .insights .leave-month svg circle {
     stroke-dashoffset: 35;
     stroke-dasharray: 110;
-}
+} */
 
 main .insights .progress .number {
     position: absolute;
@@ -358,6 +358,18 @@ main .insights .progress .number {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+main .insights .leave .progress .number p{
+    color: var(--color-danger);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+main .insights .leave-month .progress .number p{
+    color: var(--color-success);
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 main .insights small {

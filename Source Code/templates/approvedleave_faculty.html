@@ -11,7 +11,14 @@
 
     <!-- css -->
 
-    <link rel="stylesheet" href="../static/css/leave-status.css">
+    <link rel="stylesheet" href="../static/css/approvedleave.css">
+    <script>
+        setTimeout(function(){
+            if ($('#msg').length > 0) {
+                $('#msg').remove();
+            }
+        }, 1500)    // 2000 millisecond
+    </script>
 
 <script> //for redirection
     function redirectToPending() {
@@ -20,13 +27,8 @@
 
     function redirectToRejected() {
             window.location.href = "{% url 'leave_status_rejected' %}";
-    }
-    setTimeout(function(){
-            if ($('#msg').length > 0) {
-                $('#msg').remove();
-            }
-    }, 1500)    // 2000 millisecond
-</script>
+        }
+    </script>
     <title>Dashboard</title>
 </head>
 {% if messages %}
@@ -52,26 +54,40 @@
             </div>
 
             <div class="sidebar">
-                    <a href="/admin_page" class="onclickf" id="button1">
-                        <i class="material-icons">dashboard</i>
-                        <h3>Dashboard</h3>
-                    </a>
-                    
-                    <a href= "#" class="onclickf active" id="button3">
-                        <i class="material-icons">add_circle</i>
-                        <h3>Leave Status</h3>
-                    </a>
-                    <!-- <a href="/leaveform" class="onclickf active" id="button3">
-                        <i class="material-icons">add_circle</i>
-                        <h3>Leave Status</h3>
-                    </a> -->
-                    
-            
+                <a href="/dashboard_redirect_after_leave_apply" class="onclickf" id="button1">
+                    <i class="material-icons">dashboard</i>
+                    <h3>Dashboard</h3>
+                </a>
+                
+                <a href="/profile_page" class="onclickf" id="button2" onclick={onclickactive}>
+                    <i class="material-icons">person</i>
+                    <h3>Profile</h3>
+                </a>
+                
+                <a href="/leaveform" class="onclickf" id="button3">
+                    <i class="material-icons">add_circle</i>
+                    <h3>Apply for Leave</h3>
+                </a>
+                
+                <a href="/approved_leave_data" class="onclickf active" id="button4">
+                    <i class="material-icons">import_contacts</i>
+                    <h3>Approved Leaves</h3>
+                </a>
+                
+                <!-- <a href="#" class="onclickf" id="button5">
+                    <i class="material-icons">school</i>
+                    <h3>Courses</h3>
+                </a> -->
+                
+                <!-- <a href="#" class="onclickf" id="button6">
+                    <i class="material-icons">settings</i>
+                    <h3>Settings</h3>
+                </a> -->
 
-                    <a href="/logout" class="onclickf" id="button7">
-                      <i class="material-icons">logout</i>
-                      <h3>Logout</h3>
-                    </a>
+                <a href="/logout" class="onclickf" id="button7">
+                  <i class="material-icons">logout</i>
+                  <h3>Logout</h3>
+                </a>
             </div> 
         </aside>
 
@@ -91,12 +107,14 @@
                 </div>
 
                 <div class="tabs">
-                  <div class="tab">
+                  <!-- <div class="tab">
                     <button class="tablinks" onclick="redirectToPending()">Pending</button>
                     <button class="tablinks" onclick="status(event, 'Approved')">Approved</button>
                     <button class="tablinks" onclick="redirectToRejected()">Rejected</button>
+                  </div> -->
+                  <div class="title">
+                    <h2>Approved Leaves of Students and TAs</h2>
                   </div>
-                  
                   <!-- Tab content -->
                   
                   <div id="Approved" class="tabcontent">
@@ -112,12 +130,12 @@
                                 <th>To</th>
                                 <th>Reason</th>
                                 <th>Role</th>
-                                <th></th>
+                                <!-- <th></th> -->
                             </tr>
                         </thead>
                         <tbody>
-                            {% for leave in reply %}
-                                {% if leave.status == "approved" %}
+                            {% for leave in leave_data %}
+                                <!-- {% if leave.status == "approved" %} -->
                                 <tr>
                                     <td>{{leave.id}}</td>
                                     <td>{{leave.name}}</td>
@@ -127,14 +145,9 @@
                                     <td>{{leave.to_date}}</td>
                                     <td>{{leave.reason}}</td>
                                     <td>{{leave.role}}</td>
-                                    <td>
-                                        <!-- <button class="reject"><i class="material-icons">close</i></button> -->
-
-                                        <button class="reject"><i class="material-icons" onclick="window.location.href='approved_to_rejected/{{leave.oid}}/'"> close</i></button>
-
-                                    </td>
+                            
                                 </tr>
-                                {% endif %}
+                                <!-- {% endif %} -->
                             {% endfor %}
                         </tbody>
                     </table>
@@ -144,7 +157,7 @@
 
         </div>
 
-        <!-- <div class="right">
+        <div class="right">
             <div class="top">
                 <button id="menu-btn">
                     <i class="material-icons">menu</i>
@@ -163,15 +176,12 @@
                         <img src="" alt="profile-photo">
                     </div>
                 </div>
-            </div> -->
+            </div>
 
         
 
     </div>
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'js/popper.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="../static/js/leave-status.js"></script>
+
+    <script src="../static/js/approvedleave.js"></script>
 </body>
 </html>    

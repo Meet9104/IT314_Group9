@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 :root {
@@ -101,6 +102,36 @@ h5 {
 small {
     font-size: 0.75rem;
 }
+.Profile_Picture img{
+    
+    width: 302px;
+}
+.Profile_Picture {
+    display: flex;
+    justify-content: center;
+}
+.info
+{
+    display: flex;
+    justify-content: center;
+}
+.info-list {
+    margin-top: 30px;
+    list-style: none;
+  }
+  
+  .info-list li {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #666;
+  }
+  
+  .info-list li strong {
+    font-weight: 700;
+    margin-right: 10px;
+    color: #333;
+  }
+
 
 .profile-photo {
     width: 2.8rem;
@@ -209,7 +240,6 @@ aside .sidebar a.active {
     background: var(--color-light);
     color: var(--color-primary);
     margin-left: 0;
-    padding-right: 1rem;
 }
 
 aside .sidebar a.active:before {
@@ -272,13 +302,21 @@ main .insights {
 
 }
 
-main .insights > div{
+.profile-container
+{
+    display: flex;
+    justify-content: center;
+}
+.profile-page{
+    /* display: flex; */
+    /* justify-content: center; */
     background: var(--color-white);
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
     margin-top: 1rem;
     box-shadow: var(--box-shadow);
     transition: all 300ms ease;
+    width: 60%;
 }
 
 main .insights > div:hover {
@@ -324,7 +362,7 @@ main .insights svg {
     height: 7rem;
 }
 
-/* main .insights svg circle {
+main .insights svg circle {
     fill: none;
     stroke: var(--color-primary);
     stroke-width: 14;
@@ -339,15 +377,15 @@ main .insights .attendence svg circle {
     stroke-dasharray: 200;
 }
 
-/* main .insights .leave svg circle {
+main .insights .leave svg circle {
     stroke-dashoffset: 20;
     stroke-dasharray: 80;
-} */
+}
 
-/* main .insights .leave-month svg circle {
+main .insights .leave-month svg circle {
     stroke-dashoffset: 35;
     stroke-dasharray: 110;
-} */ 
+}
 
 main .insights .progress .number {
     position: absolute;
@@ -358,19 +396,6 @@ main .insights .progress .number {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* color: var(--color-primary); */
-}
-
-main .insights .leave .progress .number {
-    color: var(--color-danger);
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-main .insights .leave-month .progress .number p{
-    color: var(--color-success);
-    font-size: 1.5rem;
-    font-weight: 700;
 }
 
 main .insights small {
@@ -563,7 +588,7 @@ main .leave-status a {
         position: fixed;
         left: -100%;
         background: var(--color-white);
-        width: 14rem;
+        width: 18rem;
         z-index: 3;
         box-shadow: 1rem 3rem 4rem var(--color-light);
         height: 100vh;
@@ -607,7 +632,6 @@ main .leave-status a {
     aside .close {
         display: inline-block;
         cursor: pointer;
-        padding-left: 25px;
     }
 
     main{
@@ -674,39 +698,4 @@ main .leave-status a {
     z-index: 1000;
 }
 
-.messages {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
-  
-  .message {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    color: #555;
-    margin: 0 auto;
-    padding: 10px;
-    max-width: 100%;
-    text-align: center;
-  }
-  
-  .message-success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
-  }
-
-  #circle-container {
-    width: 200px;
-    height: 200px;
-    position: relative;
-  }
-  
 
