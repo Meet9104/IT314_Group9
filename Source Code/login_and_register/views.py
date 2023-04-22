@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from bson.objectid import ObjectId
-import copy
-# Create your views here.
+from django.core.mail import EmailMessage
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.core.mail import send_mail
 from pymongo import MongoClient
 client = MongoClient(
     'mongodb+srv://maharth:maharth@cluster0.xsqej9v.mongodb.net/test')
@@ -378,11 +379,34 @@ def pending_to_approved(request, oid):
 
         # redirect to pending page using url
         # to pass updated reply to html page we need to use redirect instead of render
+
+        role = reply['role']
+        name = reply['name']
+        id = reply['id']
+        leave_type = reply['leave_type']
+        from_date = reply['from_date']
+        to_date = reply['to_date']
+        reason = reply['reason']
+        emaillist = reply['emailList']
+        print(emaillist)
+        substring = str(id) + " " + "Leave got Approved"
+
+        bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
+            from_date) + " to " + str(to_date) + " for the Reason: " + str(reason) + " has been approved." + "\n\nRegards,\nLeave Management System"
+
+        bodystring_to_emaillist = str(role) + " " + str(name) + " " + str(id) + " has applied for " + str(leave_type) + " leave from " + str(
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + "has been approved." + "\n\nRegards,\nLeave Management System"
+
+        own_email = emaillist[0]
+        own_email_list = [own_email]
+        send_mail(substring, bodystring_to_leave_applier,
+                  'leavemanagement@daiict.ac.in', own_email_list)
+        del emaillist[0]
+        send_mail(substring, bodystring_to_emaillist,
+                  'leavemanagement@daiict.ac.in', emaillist)
+
         messages.success(request, "Leave approved successfully!")
         return redirect('/leave_status_pending')
-
-        # render will not pass updated reply to html page
-        # # return render(request, '/leave_status_pending/', )
 
 
 def pending_to_rejected(request, oid):
@@ -396,6 +420,32 @@ def pending_to_rejected(request, oid):
         status = 'rejected'
         leaveTable.update_one({'_id': id}, {
             '$set': {'status': status}})
+
+        role = reply['role']
+        name = reply['name']
+        id = reply['id']
+        leave_type = reply['leave_type']
+        from_date = reply['from_date']
+        to_date = reply['to_date']
+        reason = reply['reason']
+        emaillist = reply['emailList']
+        print(emaillist)
+        substring = str(id) + " " + "Leave got Approved"
+
+        bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been rejected." + "\n\nRegards,\nLeave Management System"
+
+        bodystring_to_emaillist = str(role) + " " + str(name) + " " + str(id) + " has applied for " + str(leave_type) + " leave from " + str(
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been rejected." + "\n\nRegards,\nLeave Management System"
+
+        own_email = emaillist[0]
+        own_email_list = [own_email]
+        send_mail(substring, bodystring_to_leave_applier,
+                  'leavemanagement@daiict.ac.in', own_email_list)
+        del emaillist[0]
+        send_mail(substring, bodystring_to_emaillist,
+                  'leavemanagement@daiict.ac.in', emaillist)
+
         messages.success(request, "Leave rejected successfully!")
         return redirect('/leave_status_pending')
 
@@ -411,6 +461,31 @@ def approved_to_rejected(request, oid):
         status = 'rejected'
         leaveTable.update_one({'_id': id}, {
             '$set': {'status': status}})
+
+        role = reply['role']
+        name = reply['name']
+        id = reply['id']
+        leave_type = reply['leave_type']
+        from_date = reply['from_date']
+        to_date = reply['to_date']
+        reason = reply['reason']
+        emaillist = reply['emailList']
+        print(emaillist)
+        substring = str(id) + " " + "Leave got Approved"
+
+        bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been rejected." + "\n\nRegards,\nLeave Management System"
+
+        bodystring_to_emaillist = str(role) + " " + str(name) + " " + str(id) + " has applied for " + str(leave_type) + " leave from " + str(
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been rejected." + "\n\nRegards,\nLeave Management System"
+
+        own_email = emaillist[0]
+        own_email_list = [own_email]
+        send_mail(substring, bodystring_to_leave_applier,
+                  'leavemanagement@daiict.ac.in', own_email_list)
+        del emaillist[0]
+        send_mail(substring, bodystring_to_emaillist,
+                  'leavemanagement@daiict.ac.in', emaillist)
         messages.success(request, "Leave rejected successfully!")
         return redirect('/leave_status_approved')
 
@@ -426,5 +501,31 @@ def rejected_to_approved(request, oid):
         status = 'approved'
         leaveTable.update_one({'_id': id}, {
             '$set': {'status': status}})
+
+        role = reply['role']
+        name = reply['name']
+        id = reply['id']
+        leave_type = reply['leave_type']
+        from_date = reply['from_date']
+        to_date = reply['to_date']
+        reason = reply['reason']
+        emaillist = reply['emailList']
+        print(emaillist)
+        substring = str(id) + " " + "Leave got Approved"
+
+        bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been approved." + "\n\nRegards,\nLeave Management System"
+
+        bodystring_to_emaillist = str(role) + " " + str(name) + " " + str(id) + " has applied for " + str(leave_type) + " leave from " + str(
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been approved." + "\n\nRegards,\nLeave Management System"
+
+        own_email = emaillist[0]
+        own_email_list = [own_email]
+        send_mail(substring, bodystring_to_leave_applier,
+                  'leavemanagement@daiict.ac.in', own_email_list)
+        del emaillist[0]
+        send_mail(substring, bodystring_to_emaillist,
+                  'leavemanagement@daiict.ac.in', emaillist)
+
         messages.success(request, "Leave approved successfully!")
         return redirect('/leave_status_rejected')

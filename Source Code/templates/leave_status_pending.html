@@ -13,17 +13,9 @@
 
     <link rel="stylesheet" href="../static/css/leave-status.css">
     <script>
-        setTimeout(function(){
-            if ($('#msg').length > 0) {
-                $('#msg').remove();
-            }
-        }, 1500)    // 2000 millisecond
-    </script>
-    <script>
         function redirectToPending() {
-        
-        window.location.href = "{% url 'leave_status_pending' %}";
-    }
+            window.location.href = "{% url 'leave_status_pending' %}";
+        }
         function redirectToApproved() {
             window.location.href = "{% url 'leave_status_approved' %}";
         }
@@ -31,9 +23,11 @@
         function redirectToRejected() {
             window.location.href = "{% url 'leave_status_rejected' %}";
         }
-    
-        
-
+        setTimeout(function(){
+            if ($('#msg').length > 0) {
+                $('#msg').remove();
+            }
+        }, 1500)    // 2000 millisecond
 
         </script>
     <title>Dashboard</title>
@@ -66,6 +60,10 @@
                         <h3>Dashboard</h3>
                     </a>
                     
+                    <a href= "#" class="onclickf active" id="button3">
+                        <i class="material-icons">add_circle</i>
+                        <h3>Leave Status</h3>
+                    </a>
                     
                     <!-- <a href="/leave_status_pending" class="onclickf active" id="button3">
                         <i class="material-icfons">add_circle</i>
@@ -183,7 +181,10 @@
         
 
     </div>
-
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
     <script src="../static/js/leave-status.js"></script>
 </body>
 </html>    

@@ -12,13 +12,6 @@
     <!-- css -->
 
     <link rel="stylesheet" href="../static/css/leave-status.css">
-    <script>
-        setTimeout(function(){
-            if ($('#msg').length > 0) {
-                $('#msg').remove();
-            }
-        }, 1500)    // 2000 millisecond
-    </script>
 
 <script> //for redirection
     function redirectToPending() {
@@ -27,8 +20,13 @@
 
     function redirectToRejected() {
             window.location.href = "{% url 'leave_status_rejected' %}";
-        }
-    </script>
+    }
+    setTimeout(function(){
+            if ($('#msg').length > 0) {
+                $('#msg').remove();
+            }
+    }, 1500)    // 2000 millisecond
+</script>
     <title>Dashboard</title>
 </head>
 {% if messages %}
@@ -59,7 +57,10 @@
                         <h3>Dashboard</h3>
                     </a>
                     
-                    
+                    <a href= "#" class="onclickf active" id="button3">
+                        <i class="material-icons">add_circle</i>
+                        <h3>Leave Status</h3>
+                    </a>
                     <!-- <a href="/leaveform" class="onclickf active" id="button3">
                         <i class="material-icons">add_circle</i>
                         <h3>Leave Status</h3>
@@ -167,7 +168,10 @@
         
 
     </div>
-
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
     <script src="../static/js/leave-status.js"></script>
 </body>
 </html>    
