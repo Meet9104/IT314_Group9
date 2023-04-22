@@ -23,6 +23,8 @@ urlpatterns = [
          views.approved_to_rejected, name='approved_to_rejected'),
     path('rejected_to_approved/<str:oid>/',
          views.rejected_to_approved, name='rejected_to_approved'),
+    path('approved_leave_data', views.approved_leave_data,
+         name='approved_leave_data'),
 
 
 
