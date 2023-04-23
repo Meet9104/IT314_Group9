@@ -489,6 +489,7 @@ aside .sidebar .message-count {
 }
 
 .middle .end .cancel button{
+    text-decoration: none;
     /* color: var(--color-primary); */
     background-color: var(--color-danger);
     color: var(--color-white);

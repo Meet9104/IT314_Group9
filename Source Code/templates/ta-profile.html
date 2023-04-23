@@ -35,8 +35,8 @@
       <aside>
         <div class="top">
           <div class="logo">
-            <img src="./images/logo.png" alt="logo" />
-            <h2><span>Leave</span>Mate</h2>
+            <!-- <img src="./images/logo.png" alt="logo" /> -->
+            <h2>Leave<span>Mate</span></h2>
           </div>
           <div class="close" id="close-btn">
             <i class="material-icons">close</i>
@@ -87,21 +87,42 @@
           </div>
           <div class="info">
             <ul class="info-list">
-              <li><strong>Name:</strong>{{user.name}}</li>
-              <li><strong>Email:</strong>{{ user.email }}</li>
-              <li><strong>TA ID:</strong> {{ user.id }}</li>
-              <li><strong>Courses:</strong>
-                {% for course in user.courses %}
-                {{course}},
-                {% endfor %}
+              <li>
+                <span class="title">Name:</span>
+                <span class="content">{{user.name}}</span>
               </li>
-              <li><strong>Faculty:</strong>
-                {% for tas in user.tas %}
-
-                {{tas}},
-              {% endfor %}
+              <li>
+                <span class="title">Email:</span>
+                <span class="content">{{user.email}}</span>
               </li>
-              <!-- {% comment %} <li><strong>TA:</strong></li> {% endcomment %} -->
+              <li>
+                <span class="title">Student ID:</span>
+                <span class="content">{{user.id}}</span>
+              </li>
+              <li>
+                <span class="title">Courses:</span>
+                <span class="content">
+                  {% for course in user.courses %}
+                  {{course}},
+                  {% endfor %}
+                </span>
+              </li>
+              <li>
+                <span class="title">Faculty:</span>
+                <span class="content">
+                  {% for faculty in user.faculties %}
+                  {{faculty}},
+                  {% endfor %}
+                </span>
+              </li>
+              {% comment %} <li>
+                <span class="title">TA:</span>
+                <span class="content">
+                  {% for ta in user.tas %}
+                  {{ta}},
+                  {% endfor %}
+                </span>
+              </li> {% endcomment %}
             </ul>
           </div>
         </div>

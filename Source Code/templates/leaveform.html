@@ -96,7 +96,8 @@
                     </a>
             </div> 
         </aside>
-        <form action="/dashboard_redirect_after_leave_apply/" method="post">
+        <form action="/dashboard_redirect_after_leave_apply/" method="post"> 
+            <!-- mast cheej hai -->
             {% csrf_token %}
         <div class="middle">
             <div class="heading">
@@ -160,7 +161,7 @@
                 </div>
                 
                 <div class="cancel">
-                    <button>Cancel</button>
+                    <button><a href="/dashboard_redirect_after_leave_apply" class="button">Cancel</a></button>
                 </div>
             </div>
         
@@ -182,9 +183,9 @@
                         <p>Hey, <b>{{user.name}}</b></p>
                         <small class="text-muted">{{user.email}}</small>
                     </div>
-                    <div class="profile-photo">
+                    <!-- <div class="profile-photo">
                         <img src="" alt="profile-photo">
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

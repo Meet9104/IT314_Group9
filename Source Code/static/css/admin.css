@@ -417,6 +417,183 @@ main .leave-status a {
     color: var(--color-primary);
 }
 
+/* Form  */
+
+
+.middle .heading {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1.8rem; */
+    margin-top: 2rem;
+    color: var(--color-primary);
+}
+
+.middle .heading h2 {
+    font-size: 2rem;
+    color: var(--color-primary);
+    padding: 1rem;
+}
+
+.middle .first {
+    display: flex;
+}
+
+.middle .second {
+    display: flex;
+}
+
+.middle h3 {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
+.middle input{
+    color: var(--color-dark);
+    font-size: 18px;
+    background-color: var(--color-light);
+    padding: 0.5rem;
+    height: 3.5rem;
+    width: 20rem;
+    border: 2px solid var(--color-info-dark);
+    border-radius: var(--border-radius-1);
+}
+
+.middle input:focus{
+    border: 2px solid var(--color-primary);
+}
+
+.middle textarea {
+    color: var(--color-dark);
+    font-size: 18px;
+    background-color: var(--color-light);
+    padding: 0.5rem;
+    border: 2px solid var(--color-info-dark);
+    border-radius: var(--border-radius-1);
+}
+
+.middle textarea:focus {
+    border: 2px solid var(--color-primary);
+}
+
+.middle .name {
+    flex: 1;
+    padding: 1rem;
+}
+
+.middle .id {
+    padding: 1rem;
+}
+
+.middle .enter-pass {
+    flex: 1;
+    padding: 1rem;
+}
+
+.middle .confirm-pass {
+    padding: 1rem;
+}
+
+.middle .role {
+    /* flex: 1; */
+    padding: 1rem;
+}
+
+.middle .email {
+    padding: 1rem;
+}
+
+.middle .courses {
+    padding: 1rem;
+}
+
+.middle .tas {
+    padding: 1rem;
+}
+
+.middle .faculties {
+    padding: 1rem;
+}
+
+.middle .role select {
+    font-size: 18px;
+    width: 36.5%;
+    height: 3.5rem;
+    border-radius: var(--border-radius-1);
+    border: 2px solid var(--color-info-dark);
+    padding: 0 1rem;
+    font-size: 1rem;
+    color: var(--color-dark);
+    background: var(--color-light);
+    transition: all 300ms ease;
+}
+
+.middle .role select:focus {
+    outline: none;
+    /* border: 1px solid var(--color-primary); */
+}
+
+.middle .end {
+    display: grid;
+    grid-template-columns: 8.5rem auto;
+    margin: 3rem 0 ;
+    margin-left: 0;
+    padding: 1rem;
+    /* padding-right: 5rem; */
+}
+
+.middle .end .submit button{
+    /* color: var(--color-primary); */
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    width: 6rem;
+    height: 3rem;
+    border-radius: var(--border-radius-1);
+    border: none;
+    font-size: 1.5rem;
+    transition: all 400ms ease;
+    /* padding-right: 2rem; */
+}
+
+.middle .end .submit button:hover{
+    /* color: var(--color-primary); */
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    width: 6rem;
+    height: 3rem;
+    border-radius: var(--border-radius-1);
+    border: none;
+    font-size: 1.5rem;
+    /* border-width: 3rem;
+    border-color: var(--color-primary); */
+    border: 2.5px solid var(--color-primary);
+}
+
+.middle .end .cancel button{
+    /* color: var(--color-primary); */
+    background-color: var(--color-danger);
+    color: var(--color-white);
+    width: 6rem;
+    height: 3rem;
+    border-radius: var(--border-radius-1);
+    border: none;
+    font-size: 1.5rem;
+    transition: all 400ms ease;
+}
+
+.middle .end .cancel button:hover{
+    /* color: var(--color-primary); */
+    background-color: var(--color-white);
+    color: var(--color-danger);
+    width: 6rem;
+    height: 3rem;
+    border-radius: var(--border-radius-1);
+    border: none;
+    font-size: 1.5rem;
+    /* border-width: 3rem;
+    border-color: var(--color-primary); */
+    border: 2.5px solid var(--color-danger);
+}
+
 /* Right  */
 
 .right {

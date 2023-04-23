@@ -36,7 +36,7 @@
             </div>
 
             <div class="sidebar">
-                <a href="/dashboard_redirect_after_leave_apply" class="active onclickf" id="button1">
+                <a href="/admin_page" class="active onclickf" id="button1">
                     <i class="material-icons">dashboard</i>
                     <h3>Dashboard</h3>
                 </a>
@@ -71,6 +71,8 @@
 
         <main>
             <h1>Dashboard</h1>
+
+            <div>
 
             <div class="insights">
 
@@ -122,6 +124,85 @@
                 </div>
 
             </div>
+            
+            <form action="/admin_page" method="post">
+                    {% csrf_token %}
+                <div class="middle">
+
+                    <div class="heading">
+                        <h2>Create Account</h2>
+                    </div>
+
+                    <div class="first">
+                        <div class="name">
+                            <h3>Name</h3>
+                            <input type="text" id="name" placeholder="Name" name="name"> 
+                            <!-- name se leta hain backend me  -->
+                        </div>
+        
+                        <div class="id">
+                            <h3>ID</h3>
+                            <input type="number" id="id" placeholder="ID" name="id">
+                        </div>
+                    </div>
+                    
+                    <div class="role">
+                        <h3>Role</h3>
+                        <select name="role" id="role" class="types" name="role">
+                            <option value="student">Student</option>
+                            <option value="ta">TA</option>
+                            <option value="faculty">Faculty</option>
+                        </select>
+                    </div>
+
+                    <div class="second">
+                        <div class="enter-pass">
+                            <h3>Enter Password</h3>
+                            <input type="password" id="enter-pass" placeholder="Enter Password" name="enter-password"> 
+                            <!-- id se js mein jaega -->
+                        </div>
+
+                        <div class="confirm-pass">
+                            <h3>Confirm Password</h3>
+                            <input type="text" id="confirm-pass" placeholder="Confirm Password" name="confirm-password" onkeyup="checkPasswords()">
+                        </div>
+                    </div>
+                    <div id="error_message" style="color: red; font-size: 16px;"></div>  <!--inner html-->
+
+                    <div class="email">
+                        <h3>Email</h3>
+                        <input type="email" id="email" placeholder="Email" name="email">
+                    </div>
+
+                    <div class="courses">
+                        <h3>Courses</h3>
+                        <textarea name="courses" id="courses" cols="60" rows="5" class="courses-text" placeholder="Courses" required></textarea>
+                    </div>
+                    
+                    <div class="tas">
+                        <h3>TAs</h3>
+                        <textarea name="tas" id="tas" cols="60" rows="5" class="tas-text" placeholder="TAs" required></textarea>
+                    </div>
+        
+                    <div class="faculties">
+                        <h3>Faculties</h3>
+                        <textarea name="faculties" id="faculties" cols="60" rows="5" class="faculties-text" placeholder="Faculties" required></textarea>
+                    </div>
+        
+                    <!-- Submit Button  -->
+        
+                    <div class="end">
+                        <div class="submit">
+                            <button type="submit" class="submit-btn">Submit</button>
+                        </div>
+                        
+                        <div class="cancel">
+                            <button><a href="/admin_page" class="button">Cancel</a></button>
+                        </div>
+                    </div>
+                
+                </div>
+            </form>
         </main>
 
 
@@ -140,9 +221,9 @@
                         <p>Hey, <b>{{user.name}}</b></p>
                         <small class="text-muted">{{user.email}}</small>
                     </div>
-                    <div class="profile-photo">
+                    <!-- <div class="profile-photo">
                         <img src="" alt="profile-photo">
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -205,7 +286,18 @@
              if ($('#msg').length > 0) {
                  $('#msg').remove();
              }
-         }, 1500)    
+         }, 1500)
+         function checkPasswords() {
+            var password = document.getElementById("enter-pass").value;
+            var confirm_password = document.getElementById("confirm-pass").value;
+            var error_message = document.getElementById("error_message");
+            
+            if (password != confirm_password) {
+                error_message.innerHTML = "Passwords do not match";
+            } else {
+                error_message.innerHTML = "";
+            }
+        } 
      </script>
 </body>
 </html>
