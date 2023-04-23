@@ -27,7 +27,7 @@
         <aside>
             <div class="top">
                 <div class="logo">
-                    <img src="./images/logo.png" alt="logo">
+                    <!-- <img src="./images/logo.png" alt="logo"> -->
                     <h2>Leave<span>Mate</span></h2>
                 </div>
                 <div class="close" id="close-btn">
@@ -89,16 +89,16 @@
 
                     <div class="middle">
                         <div class="left">
-                            <h3>Attendence</h3>
-                            <h1>100</h1>
+                            <h3>Total Leaves Days Taken</h3>
+                            <h1>{{user.nol}}</h1>
                         </div>
                         <div class="progress">
                             <div class="number">
-                                <p>81%</p>
+                                <!-- <p>81%</p> -->
                             </div>
                         </div>
                     </div>
-                    <small class="text-muted">Out of : 150</small>
+                    <!-- <small class="text-muted">Out of : 150</small> -->
                 </div>
 
                 <div class="leave">
@@ -111,7 +111,8 @@
                         </div>
                         <div class="progress">
                             <div class="number" id="leaves_percent">
-                                <p>50%</p>
+                                <p id="leaves_percent"></p>
+
                             </div>
                         </div>
                     </div>
@@ -123,16 +124,16 @@
 
                     <div class="middle">
                         <div class="left">
-                            <h3>Leave taken this Semester</h3>
-                            <h1>100</h1>
+                            <h3>Total Leave hours</h3>
+                            <h2 id="leaves_hours"></h1>
                         </div>
                         <div class="progress">
                             <div class="number">
-                                <p>81%</p>
+                                <!-- <p>81%</p> -->
                             </div>
                         </div>
                     </div>
-                    <small class="text-muted">Out of : 150</small>
+                    <!-- <small class="text-muted">Out of : 150</small> -->
                 </div>
 
             </div>
@@ -191,45 +192,56 @@
             </div>
 
             <div class="recent-updates">
-                <h2>Recent Updates</h2>
-                <div class="updates">
-                    <div class="update">
-                        <div class="profile-photo">
-                            <img src="" alt="profile-photo">
+                <h2>Your Leave Status</h2>
+                
+                <div class="leave">
+                    <div class="approved">
+                        <div>
+                            <i class="material-icons">done</i>
                         </div>
-                        <div class="msg">
-                            <p><b>202006969</b> You were absent on 10/11/2069</p>
-                            <small class="text-muted"> 5 minutes ago</small>
-                        </div>
-                    </div>
-                    <div class="update">
-                        <div class="profile-photo">
-                            <img src="" alt="profile-photo">
-                        </div>
-                        <div class="msg">
-                            <p><b>202006969</b> You were absent on 10/11/2069</p>
-                            <small class="text-muted"> 5 minutes ago</small>
-                        </div>
-                    </div>
-                    <div class="update">
-                        <div class="profile-photo">
-                            <img src="" alt="profile-photo">
-                        </div>
-                        <div class="msg">
-                            <p><b>202006969</b> You were absent on 10/11/2069</p>
-                            <small class="text-muted"> 5 minutes ago</small>
-                        </div>
-                    </div>
-                    <div class="update">
-                        <div class="profile-photo">
-                            <img src="" alt="profile-photo">
-                        </div>
-                        <div class="msg">
-                            <p><b>202006969</b> You were absent on 10/11/2069</p>
-                            <small class="text-muted"> 5 minutes ago</small>
+
+                        <div class="middle">
+                            <div class="left">
+                                <h3>Approved Leave Requests</h3>
+                                <h1 id="approved_leaves"></h1>
+
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="leave">
+                    <div class="rejected">
+                        <div>
+                            <i class="material-icons">close</i>
+                        </div>
+
+                        <div class="middle">
+                            <div class="left">
+                                <h3>Rejected Leave Requests</h3>
+                                <h1 id="rejected_leaves"></h1>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leave">
+                    <div class="pending">
+                        <div>
+                            <i class="material-icons">refresh</i>
+                        </div>
+
+                        <div class="middle">
+                            <div class="left">
+                                <h3>Pending Leave Requests</h3>
+                                <h1 id="pending_leaves"></h1>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -240,10 +252,15 @@
     <script src="{% static 'js/main.js' %}"></script>
     <script src="../static/js/faculty.js"></script>
     <script>
-        var user = JSON.parse('{{ nol_json|safe }}');
+       var user = JSON.parse('{{ nol_json|safe }}');
+        console.log(user)
         var result = (user[0] / 30) * 100;
-        result = Math.round(result * 100) / 100
+        result = Math.round(result * 100) / 100;
         document.getElementById("leaves_percent").innerHTML = `${result}%`;
+        document.getElementById("leaves_hours").innerHTML = `${user[0]*8} hours`;
+        document.getElementById("approved_leaves").innerHTML = `${user[1]}`;
+        document.getElementById("rejected_leaves").innerHTML = `${user[3]}`;
+        document.getElementById("pending_leaves").innerHTML = `${user[2]}`;
         setTimeout(function(){
             if ($('#msg').length > 0) {
                 $('#msg').remove();

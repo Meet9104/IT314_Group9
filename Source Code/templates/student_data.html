@@ -11,25 +11,22 @@
 
     <!-- css -->
 
-    <link rel="stylesheet" href="../static/css/leave-status.css">
-    <script>
-        function redirectToPending() {
-            window.location.href = "{% url 'leave_status_pending' %}";
-        }
-        function redirectToApproved() {
-            window.location.href = "{% url 'leave_status_approved' %}";
-        }
+    <link rel="stylesheet" href="{% static '/css/data.css' %}">
 
-        function redirectToRejected() {
+<script> //for redirection
+    function redirectToPending() {
+        window.location.href = "{% url 'leave_status_pending' %}";
+    }
+
+    function redirectToRejected() {
             window.location.href = "{% url 'leave_status_rejected' %}";
-        }
-        setTimeout(function(){
+    }
+    setTimeout(function(){
             if ($('#msg').length > 0) {
                 $('#msg').remove();
             }
-        }, 1500)    // 2000 millisecond
-
-        </script>
+    }, 1500)    // 2000 millisecond
+</script>
     <title>Dashboard</title>
 </head>
 {% if messages %}
@@ -60,22 +57,22 @@
                     <h3>Dashboard</h3>
                 </a>
                 
-                <a href="/leave_status_pending" class="active onclickf" id="button3">
+                <a href="/leave_status_pending" class="onclickf" id="button3">
                     <i class="material-icons">add_circle</i>
                     <h3>Leave Status</h3>
                 </a>
 
-                <a href="/student_data.html" class="onclickf" id="button3">
+                <a href="#" class="active onclickf" id="button3">
                     <i class="material-icons">analytics</i>
                     <h3>Student Data</h3>
                 </a>
 
-                <a href="/faculty_data.html" class="onclickf" id="button3">
+                <a href="./faculty_data.html" class="onclickf" id="button3">
                     <i class="material-icons">analytics</i>
                     <h3>Faculty Data</h3>
                 </a>
 
-                <a href="/ta_data.html" class="onclickf" id="button3">
+                <a href="./ta_data.html" class="onclickf" id="button3">
                     <i class="material-icons">analytics</i>
                     <h3>TA Data</h3>
                 </a>
@@ -90,7 +87,7 @@
         <div class="middle">
 
                 <div class="heading">
-                    <div class="content"><h2>Leave Status</h2></div>
+                    <div class="content"><h2>Student Data</h2></div>
                     <div class="right-top">
                         <button id="menu-btn">
                             <i class="material-icons">menu</i>
@@ -103,57 +100,33 @@
                 </div>
 
                 <div class="tabs">
-                  <div class="tab">
-                    <button class="tablinks" onclick="status(event, 'Pending')">Pending</button>
-                    <button class="tablinks" onclick="redirectToApproved()">Approved</button>
-                    <button class="tablinks" onclick="redirectToRejected()">Rejected</button>
-                  </div>
                   
                   <!-- Tab content -->
                   
-                  <div id="Pending" class="tabcontent">
+                  <div id="Approved" class="tabcontent">
                     
                     <table>
                         <thead>
                             <tr>
                                 <th>Id</th>
                                 <th>Name</th>
-                                <th>Leave Type</th>
-                                <th>Leave Duration</th>
-                                <th>From</th>
-                                <th>To</th>
-                                <th>No. of Leaves</th>
-                                <th>Reason</th>
-                                <th>Role</th>
-                                <th></th>
+                                <th>Faculties</th>
+                                <th>TAs</th>
+                                <th>Courses</th>
+                                <th>Email</th>
+                                <th>No of Leaves</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for leave in reply %}
-                                {% if leave.status == "pending" %}
+                            {% for leave in student_data %}
                                 <tr>
-                                    <td>{{leave.id}}</td>   
+                                    <td>{{leave.id}}</td>
                                     <td>{{leave.name}}</td>
                                     <td>{{leave.leave_type}}</td>
                                     <td>{{leave.leave_duration}}</td>
                                     <td>{{leave.from_date}}</td>
                                     <td>{{leave.to_date}}</td>
-                                    <td>{{leave.nols}}</td>
                                     <td>{{leave.reason}}</td>
-                                    <td>{{leave.role}}</td>
-                                    <td>
-
-                                        <button class="accept"><i class="material-icons" onclick="window.location.href='pending_to_approved/{{leave.oid}}/'"> done</i></button> 
-                                        <!-- 
-                                            window location href is used to redirect to another page
-                                            onclick is used to call a function
-                                            {{leave.oid}} is used to pass the id of the leave to the url
-                                         -->
-                                        <!-- <button class="reject"><i class="material-icons">close</i></button> -->
-
-                                        <button class="reject"><i class="material-icons" onclick="window.location.href='pending_to_rejected/{{leave.oid}}/'"> close</i></button>
-                                         
-                                    </td>
                                 </tr>
                                 {% endif %}
                             {% endfor %}
@@ -162,33 +135,9 @@
 
                   </div>
                 </div>
-
         </div>
-
-        <!-- <div class="right">
-            <div class="top">
-                <button id="menu-btn">
-                    <i class="material-icons">menu</i>
-                </button>
-                <div class="theme-toggler">
-                    <i class="material-icons active">light_mode</i>
-                    <i class="material-icons">dark_mode</i>
-                </div>
-                
-                <div class="profile">
-                    <div class="info">
-                        <p>Hey, <b>{{user.name}}</b></p>
-                        <small class="text-muted">{{user.email}}</small>
-                    </div>
-                    <div class="profile-photo">
-                        <img src="" alt="profile-photo">
-                    </div>
-                </div>
-            </div> -->
-
-        
-
     </div>
+
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>

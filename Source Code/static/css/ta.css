@@ -360,6 +360,12 @@ main .insights .progress .number {
     justify-content: center;
 }
 
+main .insights .attendence .progress .number p{
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
 main .insights .leave .progress .number p{
     color: var(--color-danger);
     font-size: 1.5rem;
@@ -498,6 +504,55 @@ main .leave-status a {
     gap: 1rem;
     margin-bottom: 1rem;
 }
+
+/* Updates Right side  */
+
+.recent-updates .leave {
+    background: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    margin-top: 1rem;
+    box-shadow: var(--box-shadow);
+    transition: all 300ms ease;
+}
+
+.recent-updates .leave:hover {
+    box-shadow: none;
+}
+
+.right .recent-updates > div i {
+    background: var(--color-primary);
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: var(--color-white);
+    font-size: 2rem;
+}
+
+.right .recent-updates .approved i{
+    background: var(--color-success);
+}
+.right .recent-updates .rejected i{
+    background: var(--color-danger);
+}
+.right .recent-updates .pending i{
+    background: var(--color-warning);
+}
+
+.right .recent-updates .leave .approved{
+    display: flex;
+    justify-content: space-around;
+}
+
+.right .recent-updates .leave .rejected{
+    display: flex;
+    justify-content: space-around;
+}
+
+.right .recent-updates .leave .pending{
+    display: flex;
+    justify-content: space-around;
+}
+
 
 
 /* Media Queries  */
