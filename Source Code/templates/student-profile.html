@@ -36,7 +36,7 @@
         <div class="top">
           <div class="logo">
             <!-- <img src="./images/logo.png" alt="logo" /> -->
-            <h2><span>Leave</span>Mate</h2>
+            <h2>Leave<span>Mate</span></h2>
           </div>
           <div class="close" id="close-btn">
             <i class="material-icons">close</i>
@@ -78,56 +78,49 @@
         <div class="profile-page">
           <h1 class="Profile">Profile</h1>
           <div class="Profile_Picture">
-            <img src="https://static.vecteezy.com/system/resources/previews/015/278/806/original/the-avatar-of-the-graduate-student-icon-illustration-in-a-flat-style-isolated-on-a-white-background-vector.jpg" />
+            <img src="https://cdn-icons-png.flaticon.com/512/3523/3523267.png" />
           </div>
           <div class="info">
             <ul class="info-list">
-              <li><strong>Name</strong>{{user.name}}</li>
-              <li><strong>Email</strong>{{user.email}}</li>
-              <li><strong>Student ID</strong> {{user.id}}</li>
-              <li><strong>Courses</strong>
-
-              {% for course in user.courses %}
-              {{course}},
-              {% endfor %}
-
+              <li>
+                <span class="title">Name:</span>
+                <span class="content">{{user.name}}</span>
               </li>
-              
-              <li><strong>Faculty</strong>
-              {% for faculties in user.faculties %}
-                
-                {{faculties}},
-              {% endfor %}
-
-              
+              <li>
+                <span class="title">Email:</span>
+                <span class="content">{{user.email}}</span>
               </li>
-              <li><strong>TA</strong>
-              {% for tas in user.tas %}
-
-                {{tas}},
-              {% endfor %}
-
-              
+              <li>
+                <span class="title">Student ID:</span>
+                <span class="content">{{user.id}}</span>
+              </li>
+              <li>
+                <span class="title">Courses:</span>
+                <span class="content">
+                  {% for course in user.courses %}
+                  {{course}},
+                  {% endfor %}
+                </span>
+              </li>
+              <li>
+                <span class="title">Faculty:</span>
+                <span class="content">
+                  {% for faculty in user.faculties %}
+                  {{faculty}},
+                  {% endfor %}
+                </span>
+              </li>
+              <li>
+                <span class="title">TA:</span>
+                <span class="content">
+                  {% for ta in user.tas %}
+                  {{ta}},
+                  {% endfor %}
+                </span>
               </li>
             </ul>
           </div>
-          <style>
-  .info-list li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .info-list li strong {
-    min-width: 120px;
-    font-weight: bold;
-    margin-right: 10px;
-  }
-
-  .info-list li strong::after {
-    margin-left: 5px;
-  }
-</style>
+          
         </div>
       </div>
 

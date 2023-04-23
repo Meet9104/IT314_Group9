@@ -52,7 +52,7 @@
             </div>
 
             <div class="sidebar">
-                <a href="/dashboard_redirect_after_leave_apply" class="onclickf" id="button1">
+                <a href="/admin_page" class="onclickf" id="button1">
                     <i class="material-icons">dashboard</i>
                     <h3>Dashboard</h3>
                 </a>
@@ -62,17 +62,17 @@
                     <h3>Leave Status</h3>
                 </a>
 
-                <a href="#" class="active onclickf" id="button3">
+                <a href="/student_data" class="active onclickf" id="button3">
                     <i class="material-icons">analytics</i>
                     <h3>Student Data</h3>
                 </a>
 
-                <a href="./faculty_data.html" class="onclickf" id="button3">
+                <a href="/faculty_data" class="onclickf" id="button3">
                     <i class="material-icons">analytics</i>
                     <h3>Faculty Data</h3>
                 </a>
 
-                <a href="./ta_data.html" class="onclickf" id="button3">
+                <a href="/ta_data" class="onclickf" id="button3">
                     <i class="material-icons">analytics</i>
                     <h3>TA Data</h3>
                 </a>
@@ -122,14 +122,29 @@
                                 <tr>
                                     <td>{{leave.id}}</td>
                                     <td>{{leave.name}}</td>
-                                    <td>{{leave.leave_type}}</td>
-                                    <td>{{leave.leave_duration}}</td>
-                                    <td>{{leave.from_date}}</td>
-                                    <td>{{leave.to_date}}</td>
-                                    <td>{{leave.reason}}</td>
+                                    <td>
+                                        <!-- {{leave.faculties}} -->
+                                        {% for faculty in leave.faculties %}
+                                        {{faculty}},
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <!-- {{leave.tas}} -->
+                                        {% for ta in leave.tas %}
+                                        {{ta}},
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for course in leave.courses %}
+                                        {{course}},
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{leave.email}}
+                                    </td>
+                                    <td>{{leave.nol}}</td>
                                 </tr>
-                                {% endif %}
-                            {% endfor %}
+                            {% endfor %}    
                         </tbody>
                     </table>
 
