@@ -156,8 +156,8 @@ aside .logo {
 }
 
 aside .logo img {
-    width: 2rem;
-    height: 2rem;
+    width: 4rem;
+    height: 4rem;
 }
 
 aside .logo h2 span {
@@ -294,12 +294,17 @@ main .insights > div i {
     font-size: 2rem;
 }
 
+main .insights > div.attendence i {
+    background: var(--color-warning);
+}
+
+
 main .insights > div.leave i {
-    background: var(--color-danger);
+    background: var(--color-success);
 }
 
 main .insights > div.leave-month i {
-    background: var(--color-success);
+    background: var(--color-danger);
 }
 
 main .insights > div .middle {

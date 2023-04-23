@@ -36,7 +36,7 @@
         <div class="top">
           <div class="logo">
             <img src="./images/logo.png" alt="logo" />
-            <h2><span>e</span>Leave</h2>
+            <h2><span>Leave</span>Mate</h2>
           </div>
           <div class="close" id="close-btn">
             <i class="material-icons">close</i>
@@ -83,15 +83,24 @@
         <div class="profile-page">
           <h1 class="Profile">Profile</h1>
           <div class="Profile_Picture">
-            <img src="{% static '/images/TA.png' %}" />
+            <img src="https://cdn4.iconfinder.com/data/icons/back-to-school-flat-2/64/avatar_college_student_man_graduation-512.png" />
           </div>
           <div class="info">
             <ul class="info-list">
               <li><strong>Name:</strong>{{user.name}}</li>
               <li><strong>Email:</strong>{{ user.email }}</li>
               <li><strong>TA ID:</strong> {{ user.id }}</li>
-              <li><strong>Courses:</strong>{{ user.courses }}</li>
-              <li><strong>Faculty:</strong>{{ user.faculties }}</li>
+              <li><strong>Courses:</strong>
+                {% for course in user.courses %}
+                {{course}},
+                {% endfor %}
+              </li>
+              <li><strong>Faculty:</strong>
+                {% for tas in user.tas %}
+
+                {{tas}},
+              {% endfor %}
+              </li>
               <!-- {% comment %} <li><strong>TA:</strong></li> {% endcomment %} -->
             </ul>
           </div>
