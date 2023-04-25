@@ -489,6 +489,7 @@ aside .sidebar .message-count {
 }
 
 .middle .end .cancel button{
+    text-decoration: none;
     /* color: var(--color-primary); */
     background-color: var(--color-danger);
     color: var(--color-white);
@@ -585,7 +586,7 @@ aside .sidebar .message-count {
 	text-align: center;
   }
   
-  .message-warning {
+  .message-error {
 	background-color: #fff3cd;
 	border-color: #ffeeba;
 	color: #856404;

@@ -8,6 +8,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from pymongo import MongoClient
+from datetime import datetime
+import json
+import pymongo
 client = MongoClient(
     'mongodb+srv://maharth:maharth@cluster0.xsqej9v.mongodb.net/test')
 db = client['Leave_Management_System']
@@ -18,19 +21,34 @@ def profile_page(request):
     facultytable = db['faculty info']
     reply = facultytable.find_one({'email': request.session.get('username')})
 
-    if reply is None:
-        studenttable = db['student info']
-        reply = studenttable.find_one(
-            {'email': request.session.get('username')})
+    if reply:
+        context = {
+            'user': reply,
+        }
+        return render(request, 'faculty-profile.html', context)
 
-    if reply is None:
-        tatble = db['ta info']
-        reply = tatble.find_one({'email': request.session.get('username')})
+    studenttable = db['student info']
+    reply = studenttable.find_one(
+        {'email': request.session.get('username')})
 
-    if reply is None:
-        adminTablte = db['adminTable']
-        reply = adminTablte.find_one(
-            {'email': request.session.get('username')})
+    if reply:
+        context = {
+            'user': reply,
+        }
+        return render(request, 'student-profile.html', context)
+
+    tatble = db['ta info']
+    reply = tatble.find_one({'email': request.session.get('username')})
+
+    if reply:
+        context = {
+            'user': reply,
+        }
+        return render(request, 'ta-profile.html', context)
+
+    adminTablte = db['adminTable']
+    reply = adminTablte.find_one(
+        {'email': request.session.get('username')})
 
     if reply:
         context = {
@@ -48,43 +66,129 @@ def logout_view(request):
 def index(request):
 
     if request.session.get('username'):
-
+        leavetable = db['leaveTable']
         adminTable = db['adminTable']
         reply = adminTable.find_one({'email': request.session.get('username')})
 
         if reply:
+
+            cursor1 = leavetable.find()
+            nol_list = []
+            a, p, r = 0, 0, 0
+            for doc in cursor1:
+                if doc['status'] == 'approved':
+                    a = a+1
+                elif doc['status'] == 'rejected':
+                    r = r+1
+                else:
+                    p = p+1
+            nol_list.append(a)
+            nol_list.append(p)
+            nol_list.append(r)
+            nol_json = json.dumps(nol_list)
+
+            # if reply:
             context = {
                 'user': reply,
+                'nol_json': nol_json
             }
             return render(request, 'admin_page.html', context)
 
         facultytable = db['faculty info']
         reply = facultytable.find_one(
             {'email': request.session.get('username')})
-
         if reply:
+            # leavetable = db['leaveTable']
+            cursor = facultytable.find(
+                {'email': request.session.get('username')})
+            cursor1 = leavetable.find(
+                {'email': request .session.get('username')})
+            nol_list = []
+            for doc in cursor:
+                nol_list.append(doc['nol'])
+            a, p, r = 0, 0, 0
+            for doc in cursor1:
+                if doc['status'] == 'approved':
+                    a = a+1
+                elif doc['status'] == 'rejected':
+                    r = r+1
+                else:
+                    p = p+1
+            nol_list.append(a)
+            nol_list.append(p)
+            nol_list.append(r)
+            nol_json = json.dumps(nol_list)
+
+            # if reply:
             context = {
                 'user': reply,
+                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                'nol_json': nol_json
             }
+
             return render(request, 'faculty.html', context)
 
         studenttable = db['student info']
         reply = studenttable.find_one(
             {'email': request.session.get('username')})
-
         if reply:
+
+            # leavetable = db['leaveTable']
+            cursor = studenttable.find(
+                {'email': request.session.get('username')})
+            cursor1 = leavetable.find(
+                {'email': request.session.get('username')})
+            nol_list = []
+            for doc in cursor:
+                nol_list.append(doc['nol'])
+            a, p, r = 0, 0, 0
+            for doc in cursor1:
+                if doc['status'] == 'approved':
+                    a = a+1
+                elif doc['status'] == 'rejected':
+                    r = r+1
+                else:
+                    p = p+1
+            nol_list.append(a)
+            nol_list.append(p)
+            nol_list.append(r)
+            nol_json = json.dumps(nol_list)
             context = {
                 'user': reply,
+                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                'nol_json': nol_json
             }
+
             return render(request, 'student.html', context)
 
         tatble = db['ta info']
         reply = tatble.find_one({'email': request.session.get('username')})
-
         if reply:
+
+            cursor = tatble.find({'email': request.session.get('username')})
+            cursor1 = leavetable.find(
+                {'email': request.session.get('username')})
+            nol_list = []
+            for doc in cursor:
+                nol_list.append(doc['nol'])
+            a, p, r = 0, 0, 0
+            for doc in cursor1:
+                if doc['status'] == 'approved':
+                    a = a+1
+                elif doc['status'] == 'rejected':
+                    r = r+1
+                else:
+                    p = p+1
+            nol_list.append(a)
+            nol_list.append(p)
+            nol_list.append(r)
+            nol_json = json.dumps(nol_list)
             context = {
                 'user': reply,
+                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                'nol_json': nol_json
             }
+
             return render(request, 'ta.html', context)
 
     form = LoginForm(request.POST or None)
@@ -93,6 +197,7 @@ def index(request):
     if request.method == 'POST':
 
         if form.is_valid():
+            leavetable = db['leaveTable']
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
 
@@ -100,10 +205,33 @@ def index(request):
             reply = adminTable.find_one({'email': username})
             if reply:
                 if reply['password'] == password:
+
                     request.session['username'] = username
                     messages.success(
                         request, "You have been logged in successfully as admin!")
-                    return render(request, 'admin_page.html', {'user': reply})
+
+                    cursor1 = leavetable.find()
+                    nol_list = []
+                    a, p, r = 0, 0, 0
+                    for doc in cursor1:
+                        if doc['status'] == 'approved':
+                            a = a+1
+                        elif doc['status'] == 'rejected':
+                            r = r+1
+                        else:
+                            p = p+1
+                    nol_list.append(a)
+                    nol_list.append(p)
+                    nol_list.append(r)
+                    nol_json = json.dumps(nol_list)
+
+                    # if reply:
+                    context = {
+                        'user': reply,
+                        'nol_json': nol_json
+                    }
+                    return render(request, 'admin_page.html', context)
+                    # return render(request, 'admin_page.html', {'user': reply})
 
             studenttable = db['student info']
             reply = studenttable.find_one({'email': username})
@@ -113,7 +241,32 @@ def index(request):
                     request.session['username'] = username
                     messages.success(
                         request, "You have been logged in successfully as Student!")
-                    return render(request, 'student.html', {'user': reply})
+
+                    cursor = studenttable.find(
+                        {'email': request.session.get('username')})
+                    cursor1 = leavetable.find(
+                        {'email': request.session.get('username')})
+                    nol_list = []
+                    for doc in cursor:
+                        nol_list.append(doc['nol'])
+                    a, p, r = 0, 0, 0
+                    for doc in cursor1:
+                        if doc['status'] == 'approved':
+                            a = a+1
+                        elif doc['status'] == 'rejected':
+                            r = r+1
+                        else:
+                            p = p+1
+                    nol_list.append(a)
+                    nol_list.append(p)
+                    nol_list.append(r)
+                    nol_json = json.dumps(nol_list)
+                    context = {
+                        'user': reply,
+                        'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                        'nol_json': nol_json
+                    }
+                    return render(request, 'student.html', context)
 
             facultytable = db['faculty info']
             reply = facultytable.find_one({'email': username})
@@ -123,7 +276,33 @@ def index(request):
                     request.session['username'] = username
                     messages.success(
                         request, "You have been logged in successfully as Faculty!")
-                    return render(request, 'faculty.html', {'user': reply})
+
+                    # leavetable = db['leaveTable']
+                    cursor = facultytable.find(
+                        {'email': request.session.get('username')})
+                    cursor1 = leavetable.find(
+                        {'email': request.session.get('username')})
+                    nol_list = []
+                    for doc in cursor:
+                        nol_list.append(doc['nol'])
+                    a, p, r = 0, 0, 0
+                    for doc in cursor1:
+                        if doc['status'] == 'approved':
+                            a = a+1
+                        elif doc['status'] == 'rejected':
+                            r = r+1
+                        else:
+                            p = p+1
+                    nol_list.append(a)
+                    nol_list.append(p)
+                    nol_list.append(r)
+                    nol_json = json.dumps(nol_list)
+                    context = {
+                        'user': reply,
+                        'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                        'nol_json': nol_json
+                    }
+                    return render(request, 'faculty.html', context)
 
             tatble = db['ta info']
             reply = tatble.find_one({'email': username})
@@ -133,7 +312,33 @@ def index(request):
                     request.session['username'] = username
                     messages.success(
                         request, "You have been logged in successfully as TA!")
-                    return render(request, 'ta.html', {'user': reply})
+                    # leavetable = db['leaveTable']
+                    cursor = tatble.find(
+                        {'email': request.session.get('username')})
+                    cursor1 = leavetable.find(
+                        {'email': request.session.get('username')})
+                    nol_list = []
+                    for doc in cursor:
+                        nol_list.append(doc['nol'])
+                    a, p, r = 0, 0, 0
+                    for doc in cursor1:
+                        if doc['status'] == 'approved':
+                            a = a+1
+                        elif doc['status'] == 'rejected':
+                            r = r+1
+                        else:
+                            p = p+1
+                    nol_list.append(a)
+                    nol_list.append(p)
+                    nol_list.append(r)
+                    nol_json = json.dumps(nol_list)
+                    context = {
+                        'user': reply,
+                        'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                        'nol_json': nol_json
+                    }
+
+                    return render(request, 'ta.html', context)
 
             messages.error(request, "Please Enter Valid Details!")
             return render(request, 'index.html', {'form': form, 'msg': msg})
@@ -164,7 +369,7 @@ def leaveform(request):
             context = {
                 'user': reply,
             }
-            return render(request, 'leaveform.html', context)
+            return render(request, 'leaveform-student.html', context)
 
         tatble = db['ta info']
         reply = tatble.find_one({'email': request.session.get('username')})
@@ -178,6 +383,10 @@ def leaveform(request):
 
 def dashboard_redirect_after_leave_apply(request):
     if request.method == 'POST':
+        studenttable = db['student info']
+        facultytable = db['faculty info']
+        tatble = db['ta info']
+
         leave_type = request.POST.get('leave-type')
         leave_duration = request.POST.get('leave-duration')
         from_date = request.POST.get('from-date')
@@ -186,11 +395,42 @@ def dashboard_redirect_after_leave_apply(request):
 
         if from_date > to_date:
             messages.error(request, 'From date cannot be greater than to date')
-            return render(request, 'leaveform.html')
+            return render(request, 'leaveform-student.html')
+
+        leavetable = db['leaveTable']
+        check = list(leavetable.find(
+            {'email': request.session.get('username')}))
+        # print(check)
+        if check:
+            for i in check:
+                print(i['to_date'],i['from_date'])
+                if i['to_date'] >= from_date and i['from_date'] <= to_date:
+                    messages.error(
+                        request, 'You have already applied for leave in this duration')
+                    reply = studenttable.find_one(
+                        {'email': request.session.get('username')})
+                    if reply:
+                        context = {
+                            'user': reply,
+                        }
+                        return render(request, 'leaveform-student.html', context)
+                    reply = tatble.find_one(
+                        {'email': request.session.get('username')})
+                    if reply:
+                        context = {
+                            'user': reply,
+                        }
+                        return render(request, 'leaveform.html', context)
+                    reply = facultytable.find_one(
+                        {'email': request.session.get('username')})
+                    if reply:
+                        context = {
+                            'user': reply,
+                        }
+                        return render(request, 'leaveform.html', context)
 
         username = request.session.get('username')
 
-        studenttable = db['student info']
         reply = studenttable.find_one({'email': username})
 
         if reply:
@@ -205,8 +445,8 @@ def dashboard_redirect_after_leave_apply(request):
             name = reply['name']
             email = reply['email']
             id = reply['id']
+            nols = reply['nol']
 
-        facultytable = db['faculty info']
         reply = facultytable.find_one({'email': username})
 
         if reply:
@@ -221,8 +461,8 @@ def dashboard_redirect_after_leave_apply(request):
             name = reply['name']
             email = reply['email']
             id = reply['id']
+            nols = reply['nol']
 
-        tatble = db['ta info']
         reply = tatble.find_one({'email': username})
 
         if reply:
@@ -237,7 +477,7 @@ def dashboard_redirect_after_leave_apply(request):
             name = reply['name']
             email = reply['email']
             id = reply['id']
-
+            nols = reply['nol']
         leaveTableEntry = {
             'leave_type': leave_type,
             'leave_duration': leave_duration,
@@ -250,12 +490,13 @@ def dashboard_redirect_after_leave_apply(request):
             'name': name,
             'email': email,
             'id': id,
+            'nols': nols,
         }
 
-        if len(from_date) == 0 or len(to_date) == 0 or len(reason) == 0:
-            messages.error(
-                request, "Please fill all the details before submitting!")
-            return render(request, 'leaveform.html')
+        # if len(from_date) == 0 or len(to_date) == 0 or len(reason) == 0:
+        #     messages.error(
+        #         request, "Please fill all the details before submitting!")
+        #     return render(request, 'leaveform.html')
 
         leaveTable = db['leaveTable']
         leaveTable.insert_one(leaveTableEntry)
@@ -267,63 +508,207 @@ def dashboard_redirect_after_leave_apply(request):
             messages.error(request, "Error in applying for leave!")
 
     if request.session.get('username'):
+        leavetable = db['leaveTable']
 
         facultytable = db['faculty info']
         reply = facultytable.find_one(
             {'email': request.session.get('username')})
-
         if reply:
+
+            cursor = facultytable.find(
+                {'email': request.session.get('username')})
+            cursor1 = leavetable.find(
+                {'email': request.session.get('username')})
+            nol_list = []
+            for doc in cursor:
+                nol_list.append(doc['nol'])
+            a, p, r = 0, 0, 0
+            for doc in cursor1:
+                if doc['status'] == 'approved':
+                    a = a+1
+                elif doc['status'] == 'rejected':
+                    r = r+1
+                else:
+                    p = p+1
+            nol_list.append(a)
+            nol_list.append(p)
+            nol_list.append(r)
+            nol_json = json.dumps(nol_list)
             context = {
                 'user': reply,
+                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                'nol_json': nol_json
             }
             return render(request, 'faculty.html', context)
 
+        # studenttable = db['student info']
+        # reply = studenttable.find_one(
+        #     {'email': request.session.get('username')})
+
+        # cursor = studenttable.find({'email': request.session.get('username')})
+        # nol_list = [doc['nol']
+        #             for doc in cursor]
+        # nol_json = json.dumps(nol_list)
+        # if reply:
+        #     context = {
+        #         'user': reply,
+        #         'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+        #         'nol_json': nol_json
+        #     }
+        #     return render(request, 'student.html', context)
         studenttable = db['student info']
         reply = studenttable.find_one(
             {'email': request.session.get('username')})
 
         if reply:
+            # if reply['password'] == password:
+            # request.session['username'] = username
+            # messages.success(
+            #     request, "You have been logged in successfully as Student!")
+
+            # leavetable = db['leaveTable']
+            cursor = studenttable.find(
+                {'email': request.session.get('username')})
+            cursor1 = leavetable.find(
+                {'email': request.session.get('username')})
+            nol_list = []
+            for doc in cursor:
+                nol_list.append(doc['nol'])
+            a, p, r = 0, 0, 0
+            for doc in cursor1:
+                if doc['status'] == 'approved':
+                    a = a+1
+                elif doc['status'] == 'rejected':
+                    r = r+1
+                else:
+                    p = p+1
+            nol_list.append(a)
+            nol_list.append(p)
+            nol_list.append(r)
+            nol_json = json.dumps(nol_list)
             context = {
                 'user': reply,
+                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                'nol_json': nol_json
             }
             return render(request, 'student.html', context)
 
         tatble = db['ta info']
         reply = tatble.find_one({'email': request.session.get('username')})
-
         if reply:
+
+            cursor = tatble.find({'email': request.session.get('username')})
+            cursor1 = leavetable.find(
+                {'email': request.session.get('username')})
+            nol_list = []
+            for doc in cursor:
+                nol_list.append(doc['nol'])
+            a, p, r = 0, 0, 0
+            for doc in cursor1:
+                if doc['status'] == 'approved':
+                    a = a+1
+                elif doc['status'] == 'rejected':
+                    r = r+1
+                else:
+                    p = p+1
+            nol_list.append(a)
+            nol_list.append(p)
+            nol_list.append(r)
+            nol_json = json.dumps(nol_list)
             context = {
                 'user': reply,
+                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
+                'nol_json': nol_json
             }
             return render(request, 'ta.html', context)
 
-        adminTablte = db['adminTable']
-        reply = adminTablte.find_one(
-            {'email': request.session.get('username')})
+        # adminTablte = db['adminTable']
+        # reply = adminTablte.find_one(
+        #     {'email': request.session.get('username')})
 
-        if reply:
-            context = {
-                'user': reply,
-            }
-            return render(request, 'admin_page.html', context)
+        # if reply:
+        #     context = {
+        #         'user': reply,
+        #     }
+        #     return render(request, 'admin_page.html', context)
 
 
 def admin_page(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        password = request.POST.get('enter-password')
+        check_password = request.POST.get('confirm-password')
+
+        # if password != check_password:
+        #     messages.error(request, "Passwords do not match!")
+        #     return redirect(admin_page)
+
+        role = request.POST.get('role')
+        id = request.POST.get('id')
+        id = int(id)
+        courses = request.POST.get('courses')
+        tas = request.POST.get('tas')
+        faculties = request.POST.get('faculties')
+        courses_list = courses.split(',')
+        tas_list = tas.split(',')
+        faculties_list = faculties.split(',')
+
+        if password != check_password:
+            messages.error(request, "Passwords do not match!")
+            return redirect('admin_page')
+
+        if role == 'student':
+            studenttable = db['student info']
+            studenttable.insert_one(
+                {'name': name, 'email': email, 'password': password, 'faculties': faculties_list, 'courses': courses_list, 'tas': tas_list, 'id': id, 'nol': 0})
+            messages.success(request, "Student added successfully!")
+
+        elif role == 'faculty':
+            facultytable = db['faculty info']
+            facultytable.insert_one(
+                {'name': name, 'email': email, 'password': password, 'faculties': faculties_list, 'courses': courses_list, 'tas': tas_list, 'id': id, 'nol': 0})
+            messages.success(request, "Faculty added successfully!")
+
+        elif role == 'ta':
+            tatble = db['ta info']
+            tatble.insert_one(
+                {'name': name, 'email': email, 'password': password, 'faculties': faculties_list, 'courses': courses_list, 'tas': tas_list, 'id': id, 'nol': 0})
+            messages.success(request, "TA added successfully!")
+
     if request.session.get('username'):
         adminTablte = db['adminTable']
         reply = adminTablte.find_one(
             {'email': request.session.get('username')})
         if reply:
+            leavetable = db['leaveTable']
+            cursor1 = leavetable.find()
+            nol_list = []
+            a, p, r = 0, 0, 0
+            for doc in cursor1:
+                if doc['status'] == 'approved':
+                    a = a+1
+                elif doc['status'] == 'rejected':
+                    r = r+1
+                else:
+                    p = p+1
+            nol_list.append(a)
+            nol_list.append(p)
+            nol_list.append(r)
+            nol_json = json.dumps(nol_list)
+
+            # if reply:
             context = {
                 'user': reply,
+                'nol_json': nol_json
             }
-        return render(request, 'admin_page.html', context)
+            return render(request, 'admin_page.html', context)
 
 
 def leave_status_approved(request):
     if request.session.get('username'):
         leaveTable = db['leaveTable']
-        reply = leaveTable.find()
+        reply = leaveTable.find().sort('from_date', pymongo.ASCENDING)
         reply = list(reply)   # convert cursor to list
         # reason for converting cursor to list is that cursor is not iterable
         # and we need to iterate over it to change the values
@@ -338,11 +723,26 @@ def leave_status_approved(request):
 def leave_status_pending(request):
     if request.session.get('username'):
         leaveTable = db['leaveTable']
-        reply = leaveTable.find()
+        reply = leaveTable.find().sort('from_date', pymongo.ASCENDING)
         reply = list(reply)
+        # studenttable = db['student info']
 
         for i in reply:
             i['oid'] = str(ObjectId(i['_id']))
+            if i['role'] == 'student':
+                studenttable = db['student info']
+                reply1 = studenttable.find_one({'email': i['email']})
+                i['nols'] = reply1['nol']
+
+            elif i['role'] == 'ta':
+                tatble = db['ta info']
+                reply1 = tatble.find_one({'email': i['email']})
+                i['nols'] = reply1['nol']
+
+            elif i['role'] == 'faculty':
+                facultytable = db['faculty info']
+                reply1 = facultytable.find_one({'email': i['email']})
+                i['nols'] = reply1['nol']
 
         return render(request, 'leave_status_pending.html', {'reply': reply})
 
@@ -350,7 +750,7 @@ def leave_status_pending(request):
 def leave_status_rejected(request):
     if request.session.get('username'):
         leaveTable = db['leaveTable']
-        reply = leaveTable.find()
+        reply = leaveTable.find().sort('from_date', pymongo.ASCENDING)
         reply = list(reply)
 
         for i in reply:
@@ -367,6 +767,44 @@ def pending_to_approved(request, oid):
         id = ObjectId(oid)
 
         # string is only needed for html to use it as a parameter in url
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find_one({'_id': id})
+        email = reply['email']
+
+        to_date = reply['to_date']
+        from_date = reply['from_date']
+
+        date1 = datetime.strptime(to_date, "%Y-%m-%d")
+        date2 = datetime.strptime(from_date, "%Y-%m-%d")
+
+        delta = date1 - date2
+        # print(delta)
+        studenttable = db['student info']
+        document = studenttable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) + (delta.days + 1)
+            studenttable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
+
+        facultytable = db['faculty info']
+        document = facultytable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) + (delta.days + 1)
+            facultytable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
+
+        tatable = db['ta info']
+        document = tatable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) + (delta.days + 1)
+            tatable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
 
         leaveTable = db['leaveTable']
         reply = leaveTable.find_one({'_id': id})
@@ -388,7 +826,7 @@ def pending_to_approved(request, oid):
         to_date = reply['to_date']
         reason = reply['reason']
         emaillist = reply['emailList']
-        print(emaillist)
+        # print(emaillist)
         substring = str(id) + " " + "Leave got Approved"
 
         bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
@@ -457,6 +895,44 @@ def approved_to_rejected(request, oid):
 
         leaveTable = db['leaveTable']
         reply = leaveTable.find_one({'_id': id})
+        email = reply['email']
+
+        to_date = reply['to_date']
+        from_date = reply['from_date']
+
+        date1 = datetime.strptime(to_date, "%Y-%m-%d")
+        date2 = datetime.strptime(from_date, "%Y-%m-%d")
+
+        delta = date1 - date2
+        studenttable = db['student info']
+        document = studenttable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) - (delta.days + 1)
+            studenttable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
+
+        facultytable = db['faculty info']
+        document = facultytable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) - (delta.days + 1)
+            facultytable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
+
+        tatable = db['ta info']
+        document = tatable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) - (delta.days + 1)
+            tatable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
+
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find_one({'_id': id})
 
         status = 'rejected'
         leaveTable.update_one({'_id': id}, {
@@ -497,6 +973,45 @@ def rejected_to_approved(request, oid):
 
         leaveTable = db['leaveTable']
         reply = leaveTable.find_one({'_id': id})
+        email = reply['email']
+
+        to_date = reply['to_date']
+        from_date = reply['from_date']
+
+        date1 = datetime.strptime(to_date, "%Y-%m-%d")
+        date2 = datetime.strptime(from_date, "%Y-%m-%d")
+
+        delta = date1 - date2
+
+        studenttable = db['student info']
+        document = studenttable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) + (delta.days + 1)
+            studenttable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
+
+        facultytable = db['faculty info']
+        document = facultytable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) + (delta.days + 1)
+            facultytable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
+
+        tatable = db['ta info']
+        document = tatable.find_one({'email': email})
+
+        if document:
+            leaves = document['nol']
+            leaves = int(leaves) + (delta.days + 1)
+            tatable.update_one({'email': email}, {
+                '$set': {'nol': leaves}})
+
+        leaveTable = db['leaveTable']
+        reply = leaveTable.find_one({'_id': id})
 
         status = 'approved'
         leaveTable.update_one({'_id': id}, {
@@ -529,3 +1044,91 @@ def rejected_to_approved(request, oid):
 
         messages.success(request, "Leave approved successfully!")
         return redirect('/leave_status_rejected')
+
+
+def approved_leave_data(request):
+    if request.session.get('username'):
+
+        leavetable = db['leaveTable']
+        facultytable = db['faculty info']
+        reply = facultytable.find_one(
+            {'email': request.session.get('username')})
+
+        if reply:  # if the user is a faculty
+
+            query = {
+                'status': 'approved',
+                'emailList': {'$in': [request.session.get('username')]},
+                '$or': [
+                    {'role': 'student'},
+                    {'role': 'ta'}
+                ]
+            }
+            reply2 = list(leavetable.find(query))
+
+            context = {
+                'leave_data': reply2,
+            }
+
+            return render(request, 'approvedleave_faculty.html', context)
+
+        tatable = db['ta info']
+        reply = tatable.find_one(
+            {'email': request.session.get('username')})
+
+        if reply:  # if the user is a ta
+
+            query = {
+                'status': 'approved',
+                'emailList': {'$in': [request.session.get('username')]},
+                'role': 'student'
+            }
+            reply3 = list(leavetable.find(query))
+
+            context = {
+                'leave_data': reply3,
+            }
+
+            # print(reply2)
+
+            return render(request, 'approvedleave_ta.html', context)
+
+
+def student_data(request):
+
+    if request.session.get('username'):
+        studenttable = db['student info']
+        reply = studenttable.find()
+
+        if reply:
+            context = {
+                'student_data': reply,
+            }
+
+        return render(request, 'student_data.html', context)
+
+
+def faculty_data(request):
+    if request.session.get('username'):
+        facultytable = db['faculty info']
+        reply = facultytable.find()
+
+        if reply:
+            context = {
+                'faculty_data': reply,
+            }
+
+        return render(request, 'faculty_data.html', context)
+
+
+def ta_data(request):
+    if request.session.get('username'):
+        tatable = db['ta info']
+        reply = tatable.find()
+
+        if reply:
+            context = {
+                'ta_data': reply,
+            }
+
+        return render(request, 'ta_data.html', context)

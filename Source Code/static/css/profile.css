@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 :root {
@@ -101,6 +102,144 @@ h5 {
 small {
     font-size: 0.75rem;
 }
+.Profile_Picture img{
+    
+    width: 302px;
+}
+.Profile_Picture {
+    display: flex;
+    justify-content: center;
+}
+/* .info
+{
+    display: flex;
+    justify-content: center;
+}
+.info-list {
+    list-style: none;
+  }
+  
+  .info-list li {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f7f7f7;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+  }
+  .info-list li:hover {
+    transform: translate(5px, 5px);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .info-list li::before,
+  .info-list li::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .info-list li::before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  .info-list li::after {
+    top: 5px;
+    left: 5px;
+    right: 0;
+    bottom: 0;
+  }
+  
+  .info-list li:hover::before,
+  .info-list li:hover::after {
+    opacity: 1;
+  }
+  
+  .info-list li strong {
+    min-width: 120px;
+    font-weight: bolder;
+    margin-right: 10px;
+    color: #333;
+    padding-left: 30px;
+  } */
+  .info {
+    margin-top: 10px;
+    background: var(--color-light);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  }
+
+  .info-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .info-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+  }
+
+  .title {
+    font-weight: bold;
+    color: #777;
+    margin-right: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .content {
+    flex-grow: 1;
+    text-align: right;
+  }
+
+  /* .content::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: #777;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    top: 50%;
+    left: 0;
+  } */
+
+  /* .content::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.2);
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: skewX(-45deg);
+    z-index: -1;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .content:hover::after {
+    background-color: rgba(0,0,0,0.5);
+    transform: skewX(-45deg) scale(1.2);
+  } */
 
 .profile-photo {
     width: 2.8rem;
@@ -156,8 +295,8 @@ aside .logo {
 }
 
 aside .logo img {
-    width: 4rem;
-    height: 4rem;
+    width: 2rem;
+    height: 2rem;
 }
 
 aside .logo h2 span {
@@ -177,7 +316,6 @@ aside .sidebar {
     height: 86vh;
     position: fixed;
     top: 5rem;
-    width: 12rem;
 }
 
 aside h3 {
@@ -210,7 +348,6 @@ aside .sidebar a.active {
     background: var(--color-light);
     color: var(--color-primary);
     margin-left: 0;
-    padding-right: 1rem;
 }
 
 aside .sidebar a.active:before {
@@ -220,9 +357,9 @@ aside .sidebar a.active:before {
     background: var(--color-primary);
 }
 
-/* aside .sidebar a .onclickf {
+aside .sidebar a .onclickf {
     transition: all 300ms ease;
-} */
+}
 
 aside .sidebar a.active i {
     color: var(--color-primary);
@@ -273,13 +410,21 @@ main .insights {
 
 }
 
-main .insights > div{
+.profile-container
+{
+    display: flex;
+    justify-content: center;
+}
+.profile-page{
+    /* display: flex; */
+    /* justify-content: center; */
     background: var(--color-white);
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
     margin-top: 1rem;
     box-shadow: var(--box-shadow);
     transition: all 300ms ease;
+    width: 60%;
 }
 
 main .insights > div:hover {
@@ -294,17 +439,12 @@ main .insights > div i {
     font-size: 2rem;
 }
 
-main .insights > div.attendence i {
-    background: var(--color-warning);
-}
-
-
 main .insights > div.leave i {
-    background: var(--color-success);
+    background: var(--color-danger);
 }
 
 main .insights > div.leave-month i {
-    background: var(--color-danger);
+    background: var(--color-success);
 }
 
 main .insights > div .middle {
@@ -415,183 +555,6 @@ main .leave-status a {
     display: block;
     margin: 1rem auto;
     color: var(--color-primary);
-}
-
-/* Form  */
-
-
-.middle .heading {
-    display: flex;
-    flex-direction: column;
-    /* gap: 1.8rem; */
-    margin-top: 2rem;
-    color: var(--color-primary);
-}
-
-.middle .heading h2 {
-    font-size: 2rem;
-    color: var(--color-primary);
-    padding: 1rem;
-}
-
-.middle .first {
-    display: flex;
-}
-
-.middle .second {
-    display: flex;
-}
-
-.middle h3 {
-    font-size: 1.2rem;
-    padding: 0.5rem;
-}
-
-.middle input{
-    color: var(--color-dark);
-    font-size: 18px;
-    background-color: var(--color-light);
-    padding: 0.5rem;
-    height: 3.5rem;
-    width: 20rem;
-    border: 2px solid var(--color-info-dark);
-    border-radius: var(--border-radius-1);
-}
-
-.middle input:focus{
-    border: 2px solid var(--color-primary);
-}
-
-.middle textarea {
-    color: var(--color-dark);
-    font-size: 18px;
-    background-color: var(--color-light);
-    padding: 0.5rem;
-    border: 2px solid var(--color-info-dark);
-    border-radius: var(--border-radius-1);
-}
-
-.middle textarea:focus {
-    border: 2px solid var(--color-primary);
-}
-
-.middle .name {
-    flex: 1;
-    padding: 1rem;
-}
-
-.middle .id {
-    padding: 1rem;
-}
-
-.middle .enter-pass {
-    flex: 1;
-    padding: 1rem;
-}
-
-.middle .confirm-pass {
-    padding: 1rem;
-}
-
-.middle .role {
-    /* flex: 1; */
-    padding: 1rem;
-}
-
-.middle .email {
-    padding: 1rem;
-}
-
-.middle .courses {
-    padding: 1rem;
-}
-
-.middle .tas {
-    padding: 1rem;
-}
-
-.middle .faculties {
-    padding: 1rem;
-}
-
-.middle .role select {
-    font-size: 18px;
-    width: 36.5%;
-    height: 3.5rem;
-    border-radius: var(--border-radius-1);
-    border: 2px solid var(--color-info-dark);
-    padding: 0 1rem;
-    font-size: 1rem;
-    color: var(--color-dark);
-    background: var(--color-light);
-    transition: all 300ms ease;
-}
-
-.middle .role select:focus {
-    outline: none;
-    /* border: 1px solid var(--color-primary); */
-}
-
-.middle .end {
-    display: grid;
-    grid-template-columns: 8.5rem auto;
-    margin: 3rem 0 ;
-    margin-left: 0;
-    padding: 1rem;
-    /* padding-right: 5rem; */
-}
-
-.middle .end .submit button{
-    /* color: var(--color-primary); */
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    width: 6rem;
-    height: 3rem;
-    border-radius: var(--border-radius-1);
-    border: none;
-    font-size: 1.5rem;
-    transition: all 400ms ease;
-    /* padding-right: 2rem; */
-}
-
-.middle .end .submit button:hover{
-    /* color: var(--color-primary); */
-    background-color: var(--color-white);
-    color: var(--color-primary);
-    width: 6rem;
-    height: 3rem;
-    border-radius: var(--border-radius-1);
-    border: none;
-    font-size: 1.5rem;
-    /* border-width: 3rem;
-    border-color: var(--color-primary); */
-    border: 2.5px solid var(--color-primary);
-}
-
-.middle .end .cancel button{
-    /* color: var(--color-primary); */
-    background-color: var(--color-danger);
-    color: var(--color-white);
-    width: 6rem;
-    height: 3rem;
-    border-radius: var(--border-radius-1);
-    border: none;
-    font-size: 1.5rem;
-    transition: all 400ms ease;
-}
-
-.middle .end .cancel button:hover{
-    /* color: var(--color-primary); */
-    background-color: var(--color-white);
-    color: var(--color-danger);
-    width: 6rem;
-    height: 3rem;
-    border-radius: var(--border-radius-1);
-    border: none;
-    font-size: 1.5rem;
-    /* border-width: 3rem;
-    border-color: var(--color-primary); */
-    border: 2.5px solid var(--color-danger);
 }
 
 /* Right  */
@@ -733,7 +696,7 @@ main .leave-status a {
         position: fixed;
         left: -100%;
         background: var(--color-white);
-        width: 14rem;
+        width: 18rem;
         z-index: 3;
         box-shadow: 1rem 3rem 4rem var(--color-light);
         height: 100vh;
@@ -777,7 +740,6 @@ main .leave-status a {
     aside .close {
         display: inline-block;
         cursor: pointer;
-        padding-left: 25px;
     }
 
     main{
@@ -844,31 +806,4 @@ main .leave-status a {
     z-index: 1000;
 }
 
-.messages {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
-  
-  .message {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    color: #555;
-    margin: 0 auto;
-    padding: 10px;
-    max-width: 100%;
-    text-align: center;
-  }
-  
-  .message-success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
-  }
+

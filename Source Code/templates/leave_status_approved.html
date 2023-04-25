@@ -43,8 +43,8 @@
         <aside>
             <div class="top">
                 <div class="logo">
-                    <img src="./images/logo.png" alt="logo">
-                    <h2><span>e</span>Leave</h2>
+                    <!-- <img src="./images/logo.png" alt="logo"> -->
+                    <h2>Leave<span>Mate</span></h2>
                 </div>
                 <div class="close" id="close-btn">
                     <i class="material-icons">close</i>
@@ -52,26 +52,35 @@
             </div>
 
             <div class="sidebar">
-                    <a href="/admin_page" class="onclickf" id="button1">
-                        <i class="material-icons">dashboard</i>
-                        <h3>Dashboard</h3>
-                    </a>
-                    
-                    <a href= "#" class="onclickf active" id="button3">
-                        <i class="material-icons">add_circle</i>
-                        <h3>Leave Status</h3>
-                    </a>
-                    <!-- <a href="/leaveform" class="onclickf active" id="button3">
-                        <i class="material-icons">add_circle</i>
-                        <h3>Leave Status</h3>
-                    </a> -->
-                    
-            
+                <a href="/admin_page" class="onclickf" id="button1">
+                    <i class="material-icons">dashboard</i>
+                    <h3>Dashboard</h3>
+                </a>
+                
+                <a href="/leave_status_pending" class="active onclickf" id="button3">
+                    <i class="material-icons">add_circle</i>
+                    <h3>Leave Status</h3>
+                </a>
 
-                    <a href="/logout" class="onclickf" id="button7">
-                      <i class="material-icons">logout</i>
-                      <h3>Logout</h3>
-                    </a>
+                <a href="/student_data" class="onclickf" id="button3">
+                    <i class="material-icons">analytics</i>
+                    <h3>Student Data</h3>
+                </a>
+
+                <a href="/faculty_data" class="onclickf" id="button3">
+                    <i class="material-icons">analytics</i>
+                    <h3>Faculty Data</h3>
+                </a>
+
+                <a href="/ta_data" class="onclickf" id="button3">
+                    <i class="material-icons">analytics</i>
+                    <h3>TA Data</h3>
+                </a>
+
+                <a href="/logout" class="onclickf" id="button7">
+                  <i class="material-icons">logout</i>
+                  <h3>Logout</h3>
+                </a>
             </div> 
         </aside>
 
@@ -144,7 +153,7 @@
 
         </div>
 
-        <div class="right">
+        <!-- <div class="right">
             <div class="top">
                 <button id="menu-btn">
                     <i class="material-icons">menu</i>
@@ -163,7 +172,7 @@
                         <img src="" alt="profile-photo">
                     </div>
                 </div>
-            </div>
+            </div> -->
 
         
 
@@ -172,6 +181,6 @@
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
-    <script src="../static/js/leave-status.js"></script>
+    <script src="{% static 'js/leave-status.js' %}"></script>
 </body>
 </html>    

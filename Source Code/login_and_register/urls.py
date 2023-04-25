@@ -23,7 +23,9 @@ urlpatterns = [
          views.approved_to_rejected, name='approved_to_rejected'),
     path('rejected_to_approved/<str:oid>/',
          views.rejected_to_approved, name='rejected_to_approved'),
-
-
-
+    path('approved_leave_data', views.approved_leave_data,
+         name='approved_leave_data'),
+     path('student_data', views.student_data,name='student_data'),
+     path('ta_data', views.ta_data,name='ta_data'),
+     path('faculty_data', views.faculty_data,name='faculty_data'),
 ]

@@ -68,11 +68,10 @@
                         <h3>Apply for Leave</h3>
                     </a>
 
-                    <a href="/approved_leave_data" class="onclickf" id="button4">
+                    <!-- <a href="/approved_leave_data" class="onclickf" id="button4">
                         <i class="material-icons">import_contacts</i>
                         <h3>Approved Leaves</h3>
-                    </a>
-
+                    </a> -->
                     
                     <!-- <a href="#" class="onclickf" id="button4">
                         <i class="material-icons">import_contacts</i>
@@ -96,8 +95,7 @@
                     </a>
             </div> 
         </aside>
-        <form action="/dashboard_redirect_after_leave_apply/" method="post"> 
-            <!-- mast cheej hai -->
+        <form action="/dashboard_redirect_after_leave_apply/" method="post">
             {% csrf_token %}
         <div class="middle">
             <div class="heading">
@@ -144,15 +142,6 @@
                 <textarea name="reason" id="reason" cols="30" rows="10" class="reason-text" required></textarea>
             </div>
 
-            <!-- Attachment  -->
-
-            <!-- <div class="attachment">
-                <h3>ATTACHMENT (if any)</h3>
-                <input class="tmp" type="file">
-                <input class="custom-file-input" type="file">
-            </div>  -->
-
-
             <!-- Submit Button  -->
 
             <div class="end">
@@ -161,7 +150,7 @@
                 </div>
                 
                 <div class="cancel">
-                    <button><a href="/dashboard_redirect_after_leave_apply" class="button">Cancel</a></button>
+                    <button>Cancel</button>
                 </div>
             </div>
         
