@@ -20,36 +20,36 @@ themeToggler.addEventListener('click', () => {
     themeToggler.querySelector('i:nth-child(1)').classList.toggle('active');
     themeToggler.querySelector('i:nth-child(2)').classList.toggle('active');
 })
-let elements = document.getElementsByClassName("onclickf");
+// let elements = document.getElementsByClassName("onclickf");
 
-for(let i = 0; i < elements.length; i++) {
-    elements[i].onclick = function () {
-        for(let j = 0; j < elements.length; j++) {
-            elements[j].classList.remove("active");
-        }
-        this.className += " active";
-    }
-}
+// for(let i = 0; i < elements.length; i++) {
+//     elements[i].onclick = function () {
+//         for(let j = 0; j < elements.length; j++) {
+//             elements[j].classList.remove("active");
+//         }
+//         this.className += " active";
+//     }
+// }
 
-function status(evt, cityName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
+// function status(evt, cityName) {
+//     // Declare all variables
+//     var i, tabcontent, tablinks;
   
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
+//     // Get all elements with class="tabcontent" and hide them
+//     tabcontent = document.getElementsByClassName("tabcontent");
+//     for (i = 0; i < tabcontent.length; i++) {
+//       tabcontent[i].style.display = "none";
+//     }
   
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
+//     // Get all elements with class="tablinks" and remove the class "active"
+//     tablinks = document.getElementsByClassName("tablinks");
+//     for (i = 0; i < tablinks.length; i++) {
+//       tablinks[i].className = tablinks[i].className.replace(" active", "");
+//     }
   
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
+//     // Show the current tab, and add an "active" class to the button that opened the tab
+//     document.getElementById(cityName).style.display = "block";
+//     evt.currentTarget.className += " active";
+//   }
 
  

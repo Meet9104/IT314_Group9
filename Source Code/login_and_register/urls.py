@@ -5,8 +5,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('logout/', views.logout_view, name='logout_view'),
     path('leaveform/', views.leaveform, name='leaveform'),
-    path('dashboard_redirect_after_leave_apply/', views.dashboard_redirect_after_leave_apply,
-         name='dashboard_redirect_after_leave_apply'),
+#     path('dashboard_redirect_after_leave_apply/', views.dashboard_redirect_after_leave_apply,
+#          name='dashboard_redirect_after_leave_apply'),
     path('profile_page/', views.profile_page, name='profile_page'),
     path('admin_page', views.admin_page, name='admin_page'),
     path('leave_status_pending', views.leave_status_pending,
@@ -28,4 +28,5 @@ urlpatterns = [
      path('student_data', views.student_data,name='student_data'),
      path('ta_data', views.ta_data,name='ta_data'),
      path('faculty_data', views.faculty_data,name='faculty_data'),
+     path('change_pass', views.change_pass,name='change_pass'),
 ]

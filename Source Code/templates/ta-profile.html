@@ -14,13 +14,6 @@
 
     <!-- css -->
     <link rel="stylesheet" href="{% static '/css/profile.css' %}" />
-    <script>
-      setTimeout(function () {
-        if ($("#msg").length > 0) {
-          $("#msg").remove();
-        }
-      }, 1500); // 2000 millisecond
-    </script>
     <title>Profile page</title>
   </head>
   {% if messages %}
@@ -45,7 +38,7 @@
 
         <div class="sidebar">
           <a
-            href="/dashboard_redirect_after_leave_apply"
+            href="/"
             class="onclickf"
             id="button1"
           >
@@ -125,6 +118,9 @@
               </li> {% endcomment %}
             </ul>
           </div>
+          <div class="submit">
+            <button class="Change-Pass-btn" onclick="goto()">Change Password</button>
+          </div>
         </div>
       </div>
   
@@ -147,5 +143,15 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script src="../static/js/faculty.js"></script>
+    <script>
+      setTimeout(function () {
+        if ($("#msg").length > 0) {
+          $("#msg").remove();
+        }
+      }, 1500); // 2000 millisecond
+      function goto(){
+        window.location.href = "/change_pass";
+      }
+    </script>
   </body>
 </html>

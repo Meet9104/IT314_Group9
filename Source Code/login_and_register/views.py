@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from .forms import SignUpForm, LoginForm
 from django.http import JsonResponse
 from django.contrib import messages
@@ -11,10 +11,13 @@ from pymongo import MongoClient
 from datetime import datetime
 import json
 import pymongo
-client = MongoClient(
-    'mongodb+srv://maharth:maharth@cluster0.xsqej9v.mongodb.net/test')
-db = client['Leave_Management_System']
+from decouple import config
+from django.contrib.auth.hashers import make_password, check_password
 
+
+client = MongoClient(
+    config('MONGO_URI'))
+db = client['Leave_Management_System']
 
 def profile_page(request):
 
@@ -204,7 +207,7 @@ def index(request):
             adminTable = db['adminTable']
             reply = adminTable.find_one({'email': username})
             if reply:
-                if reply['password'] == password:
+                if check_password(password, reply['password']):
 
                     request.session['username'] = username
                     messages.success(
@@ -237,7 +240,7 @@ def index(request):
             reply = studenttable.find_one({'email': username})
 
             if reply:
-                if reply['password'] == password:
+                if check_password(password, reply['password']):
                     request.session['username'] = username
                     messages.success(
                         request, "You have been logged in successfully as Student!")
@@ -272,7 +275,7 @@ def index(request):
             reply = facultytable.find_one({'email': username})
 
             if reply:
-                if reply['password'] == password:
+                if check_password(password, reply['password']):
                     request.session['username'] = username
                     messages.success(
                         request, "You have been logged in successfully as Faculty!")
@@ -308,7 +311,7 @@ def index(request):
             reply = tatble.find_one({'email': username})
 
             if reply:
-                if reply['password'] == password:
+                if check_password(password, reply['password']):
                     request.session['username'] = username
                     messages.success(
                         request, "You have been logged in successfully as TA!")
@@ -349,39 +352,6 @@ def index(request):
 
 
 def leaveform(request):
-    if request.session.get('username'):
-
-        facultytable = db['faculty info']
-        reply = facultytable.find_one(
-            {'email': request.session.get('username')})
-
-        if reply:
-            context = {
-                'user': reply,
-            }
-            return render(request, 'leaveform.html', context)
-
-        studenttable = db['student info']
-        reply = studenttable.find_one(
-            {'email': request.session.get('username')})
-
-        if reply:
-            context = {
-                'user': reply,
-            }
-            return render(request, 'leaveform-student.html', context)
-
-        tatble = db['ta info']
-        reply = tatble.find_one({'email': request.session.get('username')})
-
-        if reply:
-            context = {
-                'user': reply,
-            }
-            return render(request, 'leaveform.html', context)
-
-
-def dashboard_redirect_after_leave_apply(request):
     if request.method == 'POST':
         studenttable = db['student info']
         facultytable = db['faculty info']
@@ -403,7 +373,7 @@ def dashboard_redirect_after_leave_apply(request):
         # print(check)
         if check:
             for i in check:
-                print(i['to_date'],i['from_date'])
+                print(i['to_date'], i['from_date'])
                 if i['to_date'] >= from_date and i['from_date'] <= to_date:
                     messages.error(
                         request, 'You have already applied for leave in this duration')
@@ -504,133 +474,41 @@ def dashboard_redirect_after_leave_apply(request):
         if leaveTableEntry is not None:
             messages.success(
                 request, "You have successfully applied for leave!")
+            return redirect('/')
         else:
             messages.error(request, "Error in applying for leave!")
+        
 
-    if request.session.get('username'):
-        leavetable = db['leaveTable']
-
+    else:
+        print(request.session.get('username'))
         facultytable = db['faculty info']
         reply = facultytable.find_one(
             {'email': request.session.get('username')})
-        if reply:
 
-            cursor = facultytable.find(
-                {'email': request.session.get('username')})
-            cursor1 = leavetable.find(
-                {'email': request.session.get('username')})
-            nol_list = []
-            for doc in cursor:
-                nol_list.append(doc['nol'])
-            a, p, r = 0, 0, 0
-            for doc in cursor1:
-                if doc['status'] == 'approved':
-                    a = a+1
-                elif doc['status'] == 'rejected':
-                    r = r+1
-                else:
-                    p = p+1
-            nol_list.append(a)
-            nol_list.append(p)
-            nol_list.append(r)
-            nol_json = json.dumps(nol_list)
+        if reply:
             context = {
                 'user': reply,
-                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
-                'nol_json': nol_json
             }
-            return render(request, 'faculty.html', context)
+            return render(request, 'leaveform.html', context)
 
-        # studenttable = db['student info']
-        # reply = studenttable.find_one(
-        #     {'email': request.session.get('username')})
-
-        # cursor = studenttable.find({'email': request.session.get('username')})
-        # nol_list = [doc['nol']
-        #             for doc in cursor]
-        # nol_json = json.dumps(nol_list)
-        # if reply:
-        #     context = {
-        #         'user': reply,
-        #         'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
-        #         'nol_json': nol_json
-        #     }
-        #     return render(request, 'student.html', context)
         studenttable = db['student info']
         reply = studenttable.find_one(
             {'email': request.session.get('username')})
 
         if reply:
-            # if reply['password'] == password:
-            # request.session['username'] = username
-            # messages.success(
-            #     request, "You have been logged in successfully as Student!")
-
-            # leavetable = db['leaveTable']
-            cursor = studenttable.find(
-                {'email': request.session.get('username')})
-            cursor1 = leavetable.find(
-                {'email': request.session.get('username')})
-            nol_list = []
-            for doc in cursor:
-                nol_list.append(doc['nol'])
-            a, p, r = 0, 0, 0
-            for doc in cursor1:
-                if doc['status'] == 'approved':
-                    a = a+1
-                elif doc['status'] == 'rejected':
-                    r = r+1
-                else:
-                    p = p+1
-            nol_list.append(a)
-            nol_list.append(p)
-            nol_list.append(r)
-            nol_json = json.dumps(nol_list)
             context = {
                 'user': reply,
-                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
-                'nol_json': nol_json
             }
-            return render(request, 'student.html', context)
+            return render(request, 'leaveform-student.html', context)
 
         tatble = db['ta info']
         reply = tatble.find_one({'email': request.session.get('username')})
-        if reply:
 
-            cursor = tatble.find({'email': request.session.get('username')})
-            cursor1 = leavetable.find(
-                {'email': request.session.get('username')})
-            nol_list = []
-            for doc in cursor:
-                nol_list.append(doc['nol'])
-            a, p, r = 0, 0, 0
-            for doc in cursor1:
-                if doc['status'] == 'approved':
-                    a = a+1
-                elif doc['status'] == 'rejected':
-                    r = r+1
-                else:
-                    p = p+1
-            nol_list.append(a)
-            nol_list.append(p)
-            nol_list.append(r)
-            nol_json = json.dumps(nol_list)
+        if reply:
             context = {
                 'user': reply,
-                'leaves': leavetable.find({'email': request.session.get('username')}).sort('from_date', pymongo.DESCENDING),
-                'nol_json': nol_json
             }
-            return render(request, 'ta.html', context)
-
-        # adminTablte = db['adminTable']
-        # reply = adminTablte.find_one(
-        #     {'email': request.session.get('username')})
-
-        # if reply:
-        #     context = {
-        #         'user': reply,
-        #     }
-        #     return render(request, 'admin_page.html', context)
+            return render(request, 'leaveform.html', context)
 
 
 def admin_page(request):
@@ -638,7 +516,7 @@ def admin_page(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         password = request.POST.get('enter-password')
-        check_password = request.POST.get('confirm-password')
+        # check_password = request.POST.get('confirm-password')
 
         # if password != check_password:
         #     messages.error(request, "Passwords do not match!")
@@ -654,9 +532,10 @@ def admin_page(request):
         tas_list = tas.split(',')
         faculties_list = faculties.split(',')
 
-        if password != check_password:
-            messages.error(request, "Passwords do not match!")
-            return redirect('admin_page')
+        password = make_password(password)
+        # if password != check_password:
+        #     messages.error(request, "Passwords do not match!")
+        #     return redirect('admin_page')
 
         if role == 'student':
             studenttable = db['student info']
@@ -830,18 +709,18 @@ def pending_to_approved(request, oid):
         substring = str(id) + " " + "Leave got Approved"
 
         bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
-            from_date) + " to " + str(to_date) + " for the Reason: " + str(reason) + " has been approved." + "\n\nRegards,\nLeave Management System"
+            from_date) + " to " + str(to_date) + " for the Reason: " + str(reason) + " " + " has been approved." + "\n\nRegards,\nLeave Management System"
 
         bodystring_to_emaillist = str(role) + " " + str(name) + " " + str(id) + " has applied for " + str(leave_type) + " leave from " + str(
-            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + "has been approved." + "\n\nRegards,\nLeave Management System"
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " " + "has been approved." + "\n\nRegards,\nLeave Management System"
 
         own_email = emaillist[0]
         own_email_list = [own_email]
         send_mail(substring, bodystring_to_leave_applier,
-                  'leavemanagement@daiict.ac.in', own_email_list)
+                  'leavemanagement91@gmail.com', own_email_list)
         del emaillist[0]
         send_mail(substring, bodystring_to_emaillist,
-                  'leavemanagement@daiict.ac.in', emaillist)
+                  'leavemanagement91@gmail.com', emaillist)
 
         messages.success(request, "Leave approved successfully!")
         return redirect('/leave_status_pending')
@@ -867,22 +746,22 @@ def pending_to_rejected(request, oid):
         to_date = reply['to_date']
         reason = reply['reason']
         emaillist = reply['emailList']
-        print(emaillist)
-        substring = str(id) + " " + "Leave got Approved"
+        # print(emaillist)
+        substring = str(id) + " " + "Leave got Rejected"
 
         bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
-            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been rejected." + "\n\nRegards,\nLeave Management System"
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " " + " has been rejected." + "\n\nRegards,\nLeave Management System"
 
         bodystring_to_emaillist = str(role) + " " + str(name) + " " + str(id) + " has applied for " + str(leave_type) + " leave from " + str(
-            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been rejected." + "\n\nRegards,\nLeave Management System"
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " " + " has been rejected." + "\n\nRegards,\nLeave Management System"
 
         own_email = emaillist[0]
         own_email_list = [own_email]
         send_mail(substring, bodystring_to_leave_applier,
-                  'leavemanagement@daiict.ac.in', own_email_list)
+                  'leavemanagement91@gmail.com', own_email_list)
         del emaillist[0]
         send_mail(substring, bodystring_to_emaillist,
-                  'leavemanagement@daiict.ac.in', emaillist)
+                  'leavemanagement91@gmail.com', emaillist)
 
         messages.success(request, "Leave rejected successfully!")
         return redirect('/leave_status_pending')
@@ -946,22 +825,22 @@ def approved_to_rejected(request, oid):
         to_date = reply['to_date']
         reason = reply['reason']
         emaillist = reply['emailList']
-        print(emaillist)
-        substring = str(id) + " " + "Leave got Approved"
+        # print(emaillist)
+        substring = str(id) + " " + "Leave got Rejected"
 
         bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
-            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been rejected." + "\n\nRegards,\nLeave Management System"
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " " + " has been rejected." + "\n\nRegards,\nLeave Management System"
 
         bodystring_to_emaillist = str(role) + " " + str(name) + " " + str(id) + " has applied for " + str(leave_type) + " leave from " + str(
-            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been rejected." + "\n\nRegards,\nLeave Management System"
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " " + " has been rejected." + "\n\nRegards,\nLeave Management System"
 
         own_email = emaillist[0]
         own_email_list = [own_email]
         send_mail(substring, bodystring_to_leave_applier,
-                  'leavemanagement@daiict.ac.in', own_email_list)
+                  'leavemanagement91@gmail.com', own_email_list)
         del emaillist[0]
         send_mail(substring, bodystring_to_emaillist,
-                  'leavemanagement@daiict.ac.in', emaillist)
+                  'leavemanagement91@gmail.com', emaillist)
         messages.success(request, "Leave rejected successfully!")
         return redirect('/leave_status_approved')
 
@@ -1025,22 +904,22 @@ def rejected_to_approved(request, oid):
         to_date = reply['to_date']
         reason = reply['reason']
         emaillist = reply['emailList']
-        print(emaillist)
+        # print(emaillist)
         substring = str(id) + " " + "Leave got Approved"
 
         bodystring_to_leave_applier = "Dear " + str(role) + " " + str(name) + " " + str(id) + ",\n\nYour " + str(leave_type) + " leave from " + str(
-            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been approved." + "\n\nRegards,\nLeave Management System"
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " " + " has been approved." + "\n\nRegards,\nLeave Management System"
 
         bodystring_to_emaillist = str(role) + " " + str(name) + " " + str(id) + " has applied for " + str(leave_type) + " leave from " + str(
-            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " has been approved." + "\n\nRegards,\nLeave Management System"
+            from_date) + " to " + str(to_date) + " for the reason: " + str(reason) + " " + " has been approved." + "\n\nRegards,\nLeave Management System"
 
         own_email = emaillist[0]
         own_email_list = [own_email]
         send_mail(substring, bodystring_to_leave_applier,
-                  'leavemanagement@daiict.ac.in', own_email_list)
+                  'leavemanagement91@gmail.com', own_email_list)
         del emaillist[0]
         send_mail(substring, bodystring_to_emaillist,
-                  'leavemanagement@daiict.ac.in', emaillist)
+                  'leavemanagement91@gmail.com', emaillist)
 
         messages.success(request, "Leave approved successfully!")
         return redirect('/leave_status_rejected')
@@ -1132,3 +1011,58 @@ def ta_data(request):
             }
 
         return render(request, 'ta_data.html', context)
+    
+def change_pass(request):
+    if request.session.get('username'):
+        if request.method == 'POST':
+            old_password = request.POST.get('old-pass')
+            new_password = request.POST.get('enter-pass')
+
+            facultytable = db['faculty info']
+            reply = facultytable.find_one(
+                {'email': request.session.get('username')})
+
+            if reply:
+                if check_password(old_password, reply['password']) == False:
+                    messages.error(request, "Old Password is incorrect!")
+                    return render(request, 'change_pass.html')
+                else:
+                    new_password = make_password(new_password)
+                    facultytable.update_one({'email': reply['email']}, {
+                    '$set': {'password': new_password}})
+                    messages.success(request, "Password changed successfully!")
+                    # return render(request, 'faculty-profile.html',{'user':reply})
+                    return redirect('/profile_page')
+
+            studenttable = db['student info']
+            reply = studenttable.find_one(
+                {'email': request.session.get('username')})
+
+            if reply:
+                if old_password != reply['password']:
+                    messages.error(request, "Old Password is incorrect!")
+                    return render(request, 'change_pass.html')
+                else:
+                    studenttable.update_one({'email': reply['email']}, {
+                    '$set': {'password': new_password}})
+                    messages.success(request, "Password changed successfully!")
+                    # return render(request, 'student-profile.html',{'user':reply})
+                    return redirect('/profile_page')
+
+            tatble = db['ta info']
+            reply = tatble.find_one({'email': request.session.get('username')})
+
+            if reply:
+                if old_password != reply['password']:
+                    messages.error(request, "Old Password is incorrect!")
+                    return render(request, 'change_pass.html')
+                else:
+                    tatble.update_one({'email': reply['email']}, {
+                    '$set': {'password': new_password}})
+                    messages.success(request, "Password changed successfully!")
+                    # return render(request, 'ta-profile.html',{'user':reply})
+                    return redirect('/profile_page')
+            
+        else:
+            return render(request, 'change_pass.html')
+
