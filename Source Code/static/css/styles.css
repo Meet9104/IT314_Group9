@@ -52,14 +52,6 @@ body {
 	/* box-shadow: 0px 0px 24px #5C5696; */
 }
 
-.white
-{
-	color: black
-}
-.blue
-{
-	color: #7380ec;
-}
 .Right-part{
 	position: relative;
 	height: 600px;
@@ -113,8 +105,6 @@ body {
 }
 .container .two-portion .Right-part{
 	width: 360px;
-	background-color: #ffffff;
-}
 
 .screen__content {
 	border-top-left-radius: 50px;
